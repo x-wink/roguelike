@@ -112,10 +112,18 @@ const ZONE_CONFIG: Record<ZoneId, ZoneConfig> = {
 
 // ── 随机地图生成 ──────────────────────────────────────────────────────────────
 
+const COMBAT_NODE_TYPES = new Set<NodeType>(['battle', 'elite', 'boss'])
+const isCombat = (t: NodeType) => COMBAT_NODE_TYPES.has(t)
+
 /**
  * 为指定区域生成随机分支地图节点。
  * rng 必须是已初始化的 session 级 Mulberry32 序列，保证相同 seed 生成相同布局。
  * boss 行固定为最后一行，单列，不随机。
+ *
+ * 生成约束：
+ * 1. 同一行内非战斗类型（rest/event/shop）不重复，战斗类型可重复。
+ * 2. 全战斗行（该行所有分支均为战斗节点）数量不低于总行数的一半；
+ *    若不足则将最早的混合行（有战斗 + 非战斗）强制转为全战斗；无战斗池的区域跳过此约束。
  */
 export function makeSessionNodes(zoneId: ZoneId, rng: () => number): MapNode[] {
   const config = ZONE_CONFIG[zoneId]
@@ -125,9 +133,15 @@ export function makeSessionNodes(zoneId: ZoneId, rng: () => number): MapNode[] {
   config.mapRows.forEach((rowCfg, row) => {
     const span = rowCfg.maxCols - rowCfg.minCols
     const cols = rowCfg.minCols + (span > 0 ? Math.floor(rng() * (span + 1)) : 0)
+    const usedNonCombat = new Set<NodeType>()
 
     for (let col = 0; col < cols; col++) {
-      const type = rowCfg.types[Math.floor(rng() * rowCfg.types.length)]
+      // 约束1：非战斗类型在同一行内不重复，战斗类型不限
+      const available = rowCfg.types.filter((t) => isCombat(t) || !usedNonCombat.has(t))
+      const pool = available.length > 0 ? available : rowCfg.types
+      const type = pool[Math.floor(rng() * pool.length)]
+      if (!isCombat(type)) usedNonCombat.add(type)
+
       let enemyId: string | undefined
       if (type === 'battle' && config.battleEnemyIds.length > 0) {
         enemyId = config.battleEnemyIds[Math.floor(rng() * config.battleEnemyIds.length)]
@@ -160,6 +174,48 @@ export function makeSessionNodes(zoneId: ZoneId, rng: () => number): MapNode[] {
     row: bossRow,
     col: 0,
   })
+
+  // 约束2：全战斗行数量不低于总行数一半（驻渊等无战斗池区域跳过）
+  const hasCombatPool = config.battleEnemyIds.length > 0 || config.eliteEnemyIds.length > 0
+  if (hasCombatPool) {
+    const totalRows = bossRow + 1
+    const required = Math.ceil(totalRows / 2)
+
+    const byRow = new Map<number, MapNode[]>()
+    for (const n of nodes) {
+      if (!byRow.has(n.row)) byRow.set(n.row, [])
+      byRow.get(n.row)!.push(n)
+    }
+
+    const isAllCombatRow = (rowNodes: MapNode[]) => rowNodes.every((n) => isCombat(n.type))
+    let allCombatCount = [...byRow.values()].filter(isAllCombatRow).length
+
+    if (allCombatCount < required) {
+      const combatPool: NodeType[] = []
+      if (config.battleEnemyIds.length > 0) combatPool.push('battle')
+      if (config.eliteEnemyIds.length > 0) combatPool.push('elite')
+
+      // 按行序取混合行（有战斗 + 有非战斗），依次转为全战斗直到满足要求
+      const fixable = [...byRow.entries()]
+        .filter(([, rn]) => !isAllCombatRow(rn) && rn.some((n) => isCombat(n.type)))
+        .sort(([a], [b]) => a - b)
+
+      for (const [, rowNodes] of fixable) {
+        if (allCombatCount >= required) break
+        for (const n of rowNodes) {
+          if (!isCombat(n.type)) {
+            const ct = combatPool[Math.floor(rng() * combatPool.length)]
+            n.type = ct
+            n.enemyId =
+              ct === 'battle'
+                ? config.battleEnemyIds[Math.floor(rng() * config.battleEnemyIds.length)]
+                : config.eliteEnemyIds[Math.floor(rng() * config.eliteEnemyIds.length)]
+          }
+        }
+        allCombatCount++
+      }
+    }
+  }
 
   return nodes
 }
