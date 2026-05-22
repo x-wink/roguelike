@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "types": ["vitest/globals", "node"],
+    "verbatimModuleSyntax": true,
+    "baseUrl": ".",
+    "paths": {
+      "@xwink/engine": ["../engine/src/index.ts"],
+      "@xwink/rpg": ["src/index.ts"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

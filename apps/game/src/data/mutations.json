@@ -1,0 +1,71 @@
+[
+  {
+    "id": "mut_berserk",
+    "name": "狂暴",
+    "description": "敌人力量 +50%，战斗胜利金币 ×1.5",
+    "goldMultiplier": 1.5,
+    "buff": {
+      "id": "mut_berserk",
+      "name": "狂暴",
+      "duration": 999,
+      "tags": ["mutation"],
+      "effects": [
+        {
+          "when": "mount",
+          "behavior": {
+            "kind": "propMod",
+            "stat": "str",
+            "mode": "basePercent",
+            "value": 0.5
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mut_tough",
+    "name": "强韧",
+    "description": "敌人伤害减免 +25%，战斗胜利金币 ×1.4",
+    "goldMultiplier": 1.4,
+    "buff": {
+      "id": "mut_tough",
+      "name": "强韧",
+      "duration": 999,
+      "tags": ["mutation"],
+      "effects": [
+        {
+          "when": "mount",
+          "behavior": {
+            "kind": "propMod",
+            "stat": "damageReduction",
+            "mode": "baseFlat",
+            "value": 0.25
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mut_swift",
+    "name": "疾速",
+    "description": "敌人速度 +40%，战斗胜利金币 ×1.3",
+    "goldMultiplier": 1.3,
+    "buff": {
+      "id": "mut_swift",
+      "name": "疾速",
+      "duration": 999,
+      "tags": ["mutation"],
+      "effects": [
+        {
+          "when": "mount",
+          "behavior": {
+            "kind": "propMod",
+            "stat": "spd",
+            "mode": "basePercent",
+            "value": 0.4
+          }
+        }
+      ]
+    }
+  }
+]

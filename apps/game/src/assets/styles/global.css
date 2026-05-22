@@ -1,0 +1,143 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ember: #8b1a1a;
+  --color-ember-bright: #c0392b;
+  --color-ember-glow: #e74c3c;
+  --color-cinder: #4a4a4a;
+  --color-ash: #252525;
+  --color-deep: #242424;
+  --color-black: #2e2e2e;
+  --color-grey-ash: #5a5a5a;
+  --color-text-dim: #666666;
+  --color-text-mid: #aaaaaa;
+  --color-text-bright: #d0ccc6;
+  --color-text-white: #f0eeeb;
+
+  --font-xiangcui: 'XiangCui', serif;
+  --font-rubik: 'RubikDirt', sans-serif;
+  --font-jersey: 'Jersey25', monospace;
+}
+
+@font-face {
+  font-family: 'XiangCui';
+  src: url('@/assets/fonts/香萃积雪宋/XIANGCUIJIXUESONG Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'RubikDirt';
+  src:
+    url('@/assets/fonts/Rubik Dirt_100font/webfonts/RubikDirt-Regular.woff2') format('woff2'),
+    url('@/assets/fonts/Rubik Dirt_100font/ttf/RubikDirt-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Jersey10';
+  src:
+    url('@/assets/fonts/Jersey_100font/webfonts/Jersey10-Regular.woff2') format('woff2'),
+    url('@/assets/fonts/Jersey_100font/ttf/Jersey10-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Jersey15';
+  src:
+    url('@/assets/fonts/Jersey_100font/webfonts/Jersey15-Regular.woff2') format('woff2'),
+    url('@/assets/fonts/Jersey_100font/ttf/Jersey15-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Jersey20';
+  src:
+    url('@/assets/fonts/Jersey_100font/webfonts/Jersey20-Regular.woff2') format('woff2'),
+    url('@/assets/fonts/Jersey_100font/ttf/Jersey20-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Jersey25';
+  src:
+    url('@/assets/fonts/Jersey_100font/webfonts/Jersey25-Regular.woff2') format('woff2'),
+    url('@/assets/fonts/Jersey_100font/ttf/Jersey25-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --black: #2e2e2e;
+  --deep: #242424;
+  --ash: #252525;
+  --ember: #8b1a1a;
+  --ember-bright: #c0392b;
+  --ember-glow: #e74c3c;
+  --cinder: #4a4a4a;
+  --grey-ash: #5a5a5a;
+  --text-dim: #666666;
+  --text-mid: #aaaaaa;
+  --text-bright: #d0ccc6;
+  --text-white: #f0eeeb;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background: #1e1e1e;
+  color: var(--text-white);
+  font-family:
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', 'Noto Sans CJK SC',
+    sans-serif;
+  overflow: hidden;
+}
+
+#vue-ui {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  background: #1e1e1e;
+}
+
+html.reduced-motion *,
+html.reduced-motion *::before,
+html.reduced-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
+/* PC: 固定竖屏比例，居中显示 */
+@media (min-width: 480px) {
+  #vue-ui {
+    align-items: center;
+  }
+}
+
+.game-shell {
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 480px) {
+  .game-shell {
+    height: 100vh;
+    width: calc(100vh * 9 / 16);
+    flex-shrink: 0;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
+  }
+}

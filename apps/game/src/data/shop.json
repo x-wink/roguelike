@@ -1,0 +1,37 @@
+[
+  {
+    "id": "shop_heal",
+    "name": "急救注射",
+    "description": "立即回复 30 点生命",
+    "cost": 30,
+    "effect": { "kind": "healHp", "amount": 30 }
+  },
+  {
+    "id": "shop_san",
+    "name": "稳神剂",
+    "description": "立即回复 30 点理智",
+    "cost": 25,
+    "effect": { "kind": "healSan", "amount": 30 }
+  },
+  {
+    "id": "shop_max_hp",
+    "name": "体质强化",
+    "description": "最大生命值 +20",
+    "cost": 50,
+    "effect": { "kind": "maxHpUp", "amount": 20 }
+  },
+  {
+    "id": "shop_max_energy",
+    "name": "气力扩充",
+    "description": "最大气力值 +20",
+    "cost": 40,
+    "effect": { "kind": "maxEnergyUp", "amount": 20 }
+  },
+  {
+    "id": "shop_full_heal",
+    "name": "全恢复",
+    "description": "生命值完全恢复",
+    "cost": 60,
+    "effect": { "kind": "healFull" }
+  }
+]

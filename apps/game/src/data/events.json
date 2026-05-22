@@ -1,0 +1,56 @@
+[
+  {
+    "id": "old_medicine",
+    "name": "残药",
+    "description": "角落里有一瓶不知存放了多久的药液，散发着刺鼻气味。",
+    "options": [
+      { "label": "饮下", "effect": { "kind": "healHp", "amount": 25 } },
+      { "label": "放弃", "effect": { "kind": "healSan", "amount": 8 } }
+    ]
+  },
+  {
+    "id": "forgotten_notes",
+    "name": "遗忘的笔记",
+    "description": "潦草的字迹记录着某人挣扎求生的全过程，读完后难以释怀。",
+    "options": [
+      { "label": "细读", "effect": { "kind": "loseSan", "amount": 15 } },
+      { "label": "略读", "effect": { "kind": "healSan", "amount": 10 } }
+    ]
+  },
+  {
+    "id": "blood_altar",
+    "name": "献血祭坛",
+    "description": "一处古旧的祭坛，据说用鲜血浇灌可获得力量。",
+    "options": [
+      { "label": "献血", "effect": { "kind": "loseHp", "amount": 15 } },
+      { "label": "离开", "effect": { "kind": "healSan", "amount": 5 } }
+    ]
+  },
+  {
+    "id": "meditation_room",
+    "name": "静思室",
+    "description": "一间隔绝外界的密室，在此片刻冥想可清醒心智。",
+    "options": [{ "label": "冥想", "effect": { "kind": "healSan", "amount": 30 } }]
+  },
+  {
+    "id": "emergency_kit",
+    "name": "急救包",
+    "description": "损毁的应急箱里还剩下一些医疗用品。",
+    "options": [{ "label": "使用", "effect": { "kind": "healHp", "amount": 20 } }]
+  },
+  {
+    "id": "strange_machine",
+    "name": "改造舱",
+    "description": "一台运行中的改造机器。强制提升上限，但过程极为痛苦。",
+    "options": [
+      { "label": "强化体质", "effect": { "kind": "maxHpUp", "amount": 20 } },
+      { "label": "强化气力", "effect": { "kind": "maxEnergyUp", "amount": 20 } }
+    ]
+  },
+  {
+    "id": "supply_cache",
+    "name": "补给缓存",
+    "description": "隐蔽的储物格里保存着一批完好的补给。",
+    "options": [{ "label": "取用", "effect": { "kind": "healFull" } }]
+  }
+]

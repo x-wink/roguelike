@@ -1,0 +1,19 @@
+#!/bin/sh
+set -e
+
+STAGED=$(git diff --cached --name-only --diff-filter=ACMR)
+[ -z "$STAGED" ] && exit 0
+
+LINT_FILES=$(echo "$STAGED" | grep -E '\.(ts|tsx|js|jsx|vue)$' || true)
+FMT_FILES=$(echo "$STAGED"  | grep -E '\.(ts|tsx|js|jsx|vue|json|md)$' || true)
+
+if [ -n "$LINT_FILES" ]; then
+  echo "[pre-commit] oxlint..."
+  echo "$LINT_FILES" | xargs ./node_modules/.bin/oxlint || exit 1
+fi
+
+if [ -n "$FMT_FILES" ]; then
+  echo "[pre-commit] oxfmt..."
+  echo "$FMT_FILES" | xargs ./node_modules/.bin/oxfmt
+  echo "$FMT_FILES" | xargs git add
+fi

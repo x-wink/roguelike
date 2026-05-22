@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(pnpm *)",
+      "Bash(ls *)",
+      "Bash(grep *)",
+      "Bash(sed *)",
+      "Bash(find *)",
+      "Bash(echo *)",
+      "Bash(python3 *)",
+      "Bash(node *)",
+      "Bash(Get-ChildItem *)",
+      "Bash(rm -rf *)",
+      "Skill",
+      "WebSearch"
+    ],
+    "deny": [],
+    "defaultMode": "bypassPermissions"
+  }
+}

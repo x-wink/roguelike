@@ -1,0 +1,33 @@
+#!/bin/sh
+
+MSG=$(cat "$1")
+
+# Conventional Commits: type(scope): subject
+PATTERN='^(feat|fix|docs|style|refactor|perf|test|chore|ci|build|revert)(\(.+\))?: .{1,100}$'
+
+if ! echo "$MSG" | grep -qE "$PATTERN"; then
+  echo ""
+  echo "[commit-msg] 提交信息格式错误。"
+  echo ""
+  echo "  格式: <type>(<scope>): <subject>"
+  echo ""
+  echo "  type 可选值:"
+  echo "    feat     新功能"
+  echo "    fix      缺陷修复"
+  echo "    docs     文档变更"
+  echo "    style    格式调整（不影响逻辑）"
+  echo "    refactor 重构"
+  echo "    perf     性能优化"
+  echo "    test     测试相关"
+  echo "    chore    构建 / 工具链"
+  echo "    ci       CI 配置"
+  echo "    build    构建系统"
+  echo "    revert   回滚提交"
+  echo ""
+  echo "  示例: feat(battle): 添加暴击伤害计算"
+  echo "        fix: 修复营地界面立绘闪烁"
+  echo ""
+  echo "  实际提交: $MSG"
+  echo ""
+  exit 1
+fi

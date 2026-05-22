@@ -1,0 +1,2459 @@
+[
+  {
+    "id": "normal_balanced",
+    "name": "平衡结界",
+    "role": "normal",
+    "tags": [],
+    "multiplier": 1,
+    "note": "先看清楚，再动手。动错了比不动还糟。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "heal",
+          "stat": "energy",
+          "value": 20
+        }
+      }
+    ],
+    "triggers": [
+      {
+        "on": "onHit",
+        "effects": [
+          {
+            "when": "mount",
+            "target": "enemy",
+            "behavior": {
+              "kind": "buff",
+              "data": {
+                "id": "debuff_spd",
+                "name": "削弱速度",
+                "duration": 1,
+                "tags": ["debuff"],
+                "effects": [
+                  {
+                    "when": "mount",
+                    "behavior": {
+                      "kind": "propMod",
+                      "stat": "spd",
+                      "mode": "basePercent",
+                      "value": -0.15
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["debuff", "control"],
+          "addTriggers": [
+            {
+              "on": "onHit",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "enemy",
+                  "behavior": {
+                    "kind": "buff",
+                    "data": {
+                      "id": "debuff_spd",
+                      "name": "削弱速度",
+                      "duration": 2,
+                      "tags": ["debuff"],
+                      "effects": [
+                        {
+                          "when": "mount",
+                          "behavior": {
+                            "kind": "propMod",
+                            "stat": "spd",
+                            "mode": "basePercent",
+                            "value": -0.15
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["buff"],
+          "addTriggers": [
+            {
+              "on": "onHit",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": {
+                    "kind": "buff",
+                    "data": {
+                      "id": "buff_damageFinalPct",
+                      "name": "强化DAMAGEFINALPCT",
+                      "duration": 2,
+                      "tags": ["buff"],
+                      "effects": [
+                        {
+                          "when": "mount",
+                          "behavior": {
+                            "kind": "propMod",
+                            "stat": "damageFinalPct",
+                            "mode": "basePercent",
+                            "value": 0.1
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "depth",
+        "delta": {
+          "multiplier": 0.2
+        }
+      }
+    ]
+  },
+  {
+    "id": "ultimate_balanced",
+    "name": "枷锁协议",
+    "role": "ultimate",
+    "tags": [],
+    "multiplier": 0,
+    "note": "你的速度，留给我用。毒会替我做剩下的。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "cost",
+          "stat": "energy",
+          "value": 80
+        }
+      },
+      {
+        "when": "mount",
+        "target": "enemy",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "debuff_spd",
+            "name": "削弱速度",
+            "duration": 3,
+            "tags": ["debuff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "spd",
+                  "mode": "basePercent",
+                  "value": -0.25
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": "mount",
+        "target": "enemy",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "poison",
+            "name": "中毒",
+            "duration": 3,
+            "tags": ["debuff", "dot"],
+            "effects": [
+              {
+                "when": "turnStart",
+                "behavior": {
+                  "kind": "stat",
+                  "prop": "health",
+                  "amount": -8
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["control"],
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "enemy",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "stun_balanced",
+                  "name": "眩晕",
+                  "duration": 1,
+                  "tags": ["debuff", "control"],
+                  "force": true,
+                  "effects": [
+                    {
+                      "when": "turnStart",
+                      "behavior": {
+                        "kind": "control"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["debuff"],
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "enemy",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "debuff_atk",
+                  "name": "削弱攻击",
+                  "duration": 2,
+                  "tags": ["debuff"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "atk",
+                        "mode": "basePercent",
+                        "value": -0.2
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "depth",
+        "delta": {
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "enemy",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "poison",
+                  "name": "中毒",
+                  "duration": 3,
+                  "tags": ["debuff", "dot"],
+                  "effects": [
+                    {
+                      "when": "turnStart",
+                      "behavior": {
+                        "kind": "stat",
+                        "prop": "health",
+                        "amount": -5
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_bal_dot",
+    "name": "毒液注射",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "慢慢来。急的那个先出错。",
+    "effects": [],
+    "triggers": [
+      {
+        "on": "onHit",
+        "chance": 0.3,
+        "effects": [
+          {
+            "when": "mount",
+            "target": "enemy",
+            "behavior": {
+              "kind": "buff",
+              "data": {
+                "id": "poison",
+                "name": "中毒",
+                "duration": 3,
+                "tags": ["debuff", "dot"],
+                "effects": [
+                  {
+                    "when": "turnStart",
+                    "behavior": {
+                      "kind": "stat",
+                      "prop": "health",
+                      "amount": -8
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addTags": ["debuff"],
+          "addTriggers": [
+            {
+              "on": "onHit",
+              "chance": 0.5,
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "enemy",
+                  "behavior": {
+                    "kind": "buff",
+                    "data": {
+                      "id": "poison",
+                      "name": "中毒",
+                      "duration": 3,
+                      "tags": ["debuff", "dot"],
+                      "effects": [
+                        {
+                          "when": "turnStart",
+                          "behavior": {
+                            "kind": "stat",
+                            "prop": "health",
+                            "amount": -8
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_bal_debuff",
+    "name": "削骨之痛",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "打完了还要再拿走一点。这是习惯。",
+    "effects": [],
+    "triggers": [
+      {
+        "on": "onHit",
+        "effects": [
+          {
+            "when": "mount",
+            "target": "enemy",
+            "behavior": {
+              "kind": "buff",
+              "data": {
+                "id": "debuff_atk",
+                "name": "削弱攻击",
+                "duration": 2,
+                "tags": ["debuff"],
+                "effects": [
+                  {
+                    "when": "mount",
+                    "behavior": {
+                      "kind": "propMod",
+                      "stat": "atk",
+                      "mode": "basePercent",
+                      "value": -0.2
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["debuff"],
+          "addTriggers": [
+            {
+              "on": "onHit",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "enemy",
+                  "behavior": {
+                    "kind": "buff",
+                    "data": {
+                      "id": "debuff_def",
+                      "name": "削弱防御",
+                      "duration": 2,
+                      "tags": ["debuff"],
+                      "effects": [
+                        {
+                          "when": "mount",
+                          "behavior": {
+                            "kind": "propMod",
+                            "stat": "def",
+                            "mode": "basePercent",
+                            "value": -0.15
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_bal_synergy",
+    "name": "万法归宗",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "什么都会一点。在这里，够用了。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "synergy_buff",
+            "name": "协同",
+            "duration": 999,
+            "tags": ["buff", "anonymous"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "damageFinalPct",
+                  "mode": "baseFlat",
+                  "value": 0.1
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addTags": ["buff"],
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "synergy_buff_2",
+                  "name": "协同强化",
+                  "duration": 999,
+                  "tags": ["buff", "anonymous"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "damageFinalPct",
+                        "mode": "baseFlat",
+                        "value": 0.05
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "normal_aggressive",
+    "name": "乱刃",
+    "role": "normal",
+    "tags": [],
+    "multiplier": 1.3,
+    "note": "停下来就输了。不停。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "heal",
+          "stat": "energy",
+          "value": 15
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["attack"],
+          "addTriggers": [
+            {
+              "on": "onHit",
+              "chance": 0.3,
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": {
+                    "kind": "heal",
+                    "stat": "energy",
+                    "value": 20
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "depth",
+        "delta": {
+          "addTags": ["attack"],
+          "multiplier": 0.3
+        }
+      },
+      {
+        "type": "depth",
+        "delta": {
+          "multiplier": 0.15
+        }
+      }
+    ]
+  },
+  {
+    "id": "ultimate_aggressive",
+    "name": "破势",
+    "role": "ultimate",
+    "tags": [],
+    "multiplier": 2.5,
+    "note": "等到这一刀，就不留手了。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "cost",
+          "stat": "energy",
+          "value": 80
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["attack"],
+          "addTriggers": [
+            {
+              "on": "onKill",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": {
+                    "kind": "heal",
+                    "stat": "energy",
+                    "value": 40
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["attack"],
+          "armorPen": 0.3
+        }
+      },
+      {
+        "type": "depth",
+        "delta": {
+          "multiplier": 0.3
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_agg_frenzy",
+    "name": "血怒",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "打多了就停不下来。不知道从什么时候开始的。",
+    "effects": [],
+    "triggers": [
+      {
+        "on": "onHit",
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": {
+              "kind": "buff",
+              "data": {
+                "id": "frenzy_buff",
+                "name": "狂化",
+                "duration": 1,
+                "tags": ["buff"],
+                "effects": [
+                  {
+                    "when": "mount",
+                    "behavior": {
+                      "kind": "propMod",
+                      "stat": "atk",
+                      "mode": "basePercent",
+                      "value": 0.3
+                    }
+                  },
+                  {
+                    "when": "mount",
+                    "behavior": {
+                      "kind": "propMod",
+                      "stat": "spd",
+                      "mode": "basePercent",
+                      "value": 0.2
+                    }
+                  },
+                  {
+                    "when": "mount",
+                    "behavior": {
+                      "kind": "propMod",
+                      "stat": "def",
+                      "mode": "basePercent",
+                      "value": -0.2
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addTags": ["attack"],
+          "addTriggers": [
+            {
+              "on": "onHit",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": {
+                    "kind": "buff",
+                    "data": {
+                      "id": "frenzy_buff_2",
+                      "name": "狂化强化",
+                      "duration": 1,
+                      "tags": ["buff", "anonymous"],
+                      "effects": [
+                        {
+                          "when": "mount",
+                          "behavior": {
+                            "kind": "propMod",
+                            "stat": "atk",
+                            "mode": "basePercent",
+                            "value": 0.15
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_agg_execute",
+    "name": "乘胜",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "倒了一个，换手。不等。",
+    "effects": [],
+    "triggers": [
+      {
+        "on": "onKill",
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": {
+              "kind": "heal",
+              "stat": "energy",
+              "value": 40
+            }
+          }
+        ]
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addTags": ["attack"],
+          "addTriggers": [
+            {
+              "on": "onKill",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": {
+                    "kind": "heal",
+                    "stat": "energy",
+                    "value": 20
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_agg_crush",
+    "name": "势差",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "差距就是武器。用到底。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "crush_buff",
+            "name": "碾压",
+            "duration": 999,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "damageFinalPct",
+                  "mode": "baseFlat",
+                  "value": 0.1
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addTags": ["attack"],
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "crush_buff_2",
+                  "name": "碾压强化",
+                  "duration": 999,
+                  "tags": ["buff", "anonymous"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "damageFinalPct",
+                        "mode": "baseFlat",
+                        "value": 0.1
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "normal_defensive",
+    "name": "以柔克刚",
+    "role": "normal",
+    "tags": [],
+    "multiplier": 0.8,
+    "note": "挨一拳。记着。还回去。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "heal",
+          "stat": "energy",
+          "value": 10
+        }
+      },
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "buff_def",
+            "name": "强化防御",
+            "duration": 1,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "def",
+                  "mode": "basePercent",
+                  "value": 0.1
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["defense"],
+          "addTriggers": [
+            {
+              "on": "onHit",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": {
+                    "kind": "heal",
+                    "stat": "energy",
+                    "value": 20
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["defense", "protect"],
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "buff_def",
+                  "name": "强化防御",
+                  "duration": 1,
+                  "tags": ["buff"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "def",
+                        "mode": "basePercent",
+                        "value": 0.1
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "depth",
+        "delta": {
+          "multiplier": 0.15
+        }
+      }
+    ]
+  },
+  {
+    "id": "ultimate_defensive",
+    "name": "不动如山",
+    "role": "ultimate",
+    "tags": [],
+    "multiplier": 0,
+    "note": "打我。我不动。打完了再说。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "cost",
+          "stat": "energy",
+          "value": 70
+        }
+      },
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "buff_def",
+            "name": "强化防御",
+            "duration": 2,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "def",
+                  "mode": "basePercent",
+                  "value": 0.5
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "iron_wall_reduction",
+            "name": "铁壁",
+            "duration": 2,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "damageReduction",
+                  "mode": "baseFlat",
+                  "value": 0.3
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["defense"],
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "thorns_active",
+                  "name": "反刺",
+                  "duration": 2,
+                  "tags": ["buff"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "damageFinalPct",
+                        "mode": "baseFlat",
+                        "value": 0.15
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["defense", "protect"],
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "buff_def",
+                  "name": "强化防御",
+                  "duration": 3,
+                  "tags": ["buff"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "def",
+                        "mode": "basePercent",
+                        "value": 0.2
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "depth",
+        "delta": {
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "iron_wall_reduction_2",
+                  "name": "铁壁强化",
+                  "duration": 2,
+                  "tags": ["buff", "anonymous"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "damageReduction",
+                        "mode": "baseFlat",
+                        "value": 0.1
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_def_thorns",
+    "name": "荆棘",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "靠近。会疼的。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "thorns_passive",
+            "name": "荆棘",
+            "duration": 999,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "damageFinalPct",
+                  "mode": "baseFlat",
+                  "value": 0.1
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addTags": ["defense"],
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "thorns_passive_2",
+                  "name": "荆棘强化",
+                  "duration": 999,
+                  "tags": ["buff", "anonymous"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "damageFinalPct",
+                        "mode": "baseFlat",
+                        "value": 0.1
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_def_fortress",
+    "name": "越战越勇",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "每一下都在积。等打够了，再动。",
+    "effects": [],
+    "triggers": [
+      {
+        "on": "onHit",
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": {
+              "kind": "buff",
+              "data": {
+                "id": "buff_def",
+                "name": "强化防御",
+                "duration": 1,
+                "tags": ["buff"],
+                "effects": [
+                  {
+                    "when": "mount",
+                    "behavior": {
+                      "kind": "propMod",
+                      "stat": "def",
+                      "mode": "basePercent",
+                      "value": 0.08
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addTags": ["defense", "protect"],
+          "addTriggers": [
+            {
+              "on": "onHit",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": {
+                    "kind": "buff",
+                    "data": {
+                      "id": "buff_def",
+                      "name": "强化防御",
+                      "duration": 1,
+                      "tags": ["buff"],
+                      "effects": [
+                        {
+                          "when": "mount",
+                          "behavior": {
+                            "kind": "propMod",
+                            "stat": "def",
+                            "mode": "basePercent",
+                            "value": 0.04
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_def_endure",
+    "name": "回光返照",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "越到最后，越不能松。",
+    "effects": [],
+    "triggers": [
+      {
+        "on": "onHit",
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": {
+              "kind": "buff",
+              "data": {
+                "id": "endure_buff",
+                "name": "坚守",
+                "duration": 1,
+                "tags": ["buff"],
+                "effects": [
+                  {
+                    "when": "mount",
+                    "behavior": {
+                      "kind": "propMod",
+                      "stat": "def",
+                      "mode": "basePercent",
+                      "value": 0.4
+                    }
+                  },
+                  {
+                    "when": "mount",
+                    "behavior": {
+                      "kind": "propMod",
+                      "stat": "damageReduction",
+                      "mode": "baseFlat",
+                      "value": 0.15
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["defense"],
+          "addTriggers": [
+            {
+              "on": "onHit",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": {
+                    "kind": "buff",
+                    "data": {
+                      "id": "endure_buff_2",
+                      "name": "坚守强化",
+                      "duration": 1,
+                      "tags": ["buff", "anonymous"],
+                      "effects": [
+                        {
+                          "when": "mount",
+                          "behavior": {
+                            "kind": "propMod",
+                            "stat": "damageReduction",
+                            "mode": "baseFlat",
+                            "value": 0.1
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "normal_gambler",
+    "name": "梭哈",
+    "role": "normal",
+    "tags": [],
+    "multiplier": {
+      "min": 0.8,
+      "max": 1.6,
+      "strategy": "uniform"
+    },
+    "note": "下了就不能悔。这是规矩。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "heal",
+          "stat": "energy",
+          "value": 15
+        }
+      }
+    ],
+    "triggers": [
+      {
+        "on": "onCrit",
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": {
+              "kind": "heal",
+              "stat": "energy",
+              "value": 20
+            }
+          }
+        ]
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["attack"],
+          "addTriggers": [
+            {
+              "on": "onCrit",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": {
+                    "kind": "heal",
+                    "stat": "energy",
+                    "value": 20
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["attack"],
+          "multiplier": 0.4,
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "cost",
+                "stat": "san",
+                "value": 15
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "depth",
+        "delta": {
+          "multiplier": 0.15
+        }
+      }
+    ]
+  },
+  {
+    "id": "ultimate_gambler",
+    "name": "全押",
+    "role": "ultimate",
+    "tags": [],
+    "multiplier": {
+      "min": 2,
+      "max": 4,
+      "strategy": "extreme"
+    },
+    "note": "有多少押多少。清不清醒，赌完再说。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "cost",
+          "stat": "energy",
+          "value": 80
+        }
+      },
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "cost",
+          "stat": "san",
+          "value": 40
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "breadth",
+        "delta": {
+          "addTags": ["attack"],
+          "addTriggers": [
+            {
+              "on": "onCrit",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": {
+                    "kind": "heal",
+                    "stat": "san",
+                    "value": 40
+                  }
+                }
+              ],
+              "chance": 0.3
+            }
+          ]
+        }
+      },
+      {
+        "type": "depth",
+        "delta": {
+          "addTags": ["attack"],
+          "multiplier": 0.5
+        }
+      },
+      {
+        "type": "depth",
+        "delta": {
+          "multiplier": 0.3
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_gmb_lucky",
+    "name": "气运之子",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "手气这东西，不信不行。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "lucky_buff",
+            "name": "幸运",
+            "duration": 999,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "crit",
+                  "mode": "baseFlat",
+                  "value": 15
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addTags": ["attack"],
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "lucky_buff_2",
+                  "name": "幸运强化",
+                  "duration": 999,
+                  "tags": ["buff", "anonymous"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "crit",
+                        "mode": "baseFlat",
+                        "value": 15
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_gmb_edge",
+    "name": "疯狂边缘人",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "意识快散的时候，手反而稳了。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "edge_buff",
+            "name": "悬崖",
+            "duration": 999,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "damageFinalPct",
+                  "mode": "baseFlat",
+                  "value": 0.08
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addTags": ["attack"],
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "edge_buff_2",
+                  "name": "悬崖强化",
+                  "duration": 999,
+                  "tags": ["buff", "anonymous"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "damageFinalPct",
+                        "mode": "baseFlat",
+                        "value": 0.04
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_gmb_recover",
+    "name": "战意",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "打倒一个，清醒一点。这没问题。",
+    "effects": [],
+    "triggers": [
+      {
+        "on": "onHit",
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": {
+              "kind": "heal",
+              "stat": "san",
+              "value": 5
+            }
+          }
+        ]
+      },
+      {
+        "on": "onKill",
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": {
+              "kind": "heal",
+              "stat": "san",
+              "value": 15
+            }
+          }
+        ]
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addTags": ["heal"],
+          "addTriggers": [
+            {
+              "on": "onHit",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": {
+                    "kind": "heal",
+                    "stat": "san",
+                    "value": 3
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_gmb_burn",
+    "name": "引燃",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "清醒太贵了。烧掉换刀。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "gmb_burn_buff",
+            "name": "引燃",
+            "duration": 999,
+            "tags": ["anonymous"],
+            "effects": [
+              {
+                "when": "turnStart",
+                "behavior": {
+                  "kind": "stat",
+                  "prop": "san",
+                  "amount": -15
+                },
+                "condition": [
+                  {
+                    "kind": "ownerStatPct",
+                    "stat": "san",
+                    "op": ">=",
+                    "value": 0.6
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_gmb_anchor",
+    "name": "锚定",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "再乱也要留一口气。不能全散。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "gmb_anchor_buff",
+            "name": "锚定",
+            "duration": 999,
+            "tags": ["anonymous"],
+            "effects": [
+              {
+                "when": "turnStart",
+                "behavior": {
+                  "kind": "stat",
+                  "prop": "san",
+                  "amount": 10
+                },
+                "condition": [
+                  {
+                    "kind": "ownerStatPct",
+                    "stat": "san",
+                    "op": "<=",
+                    "value": 0.25
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_atk",
+    "name": "磨刃",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "打得多了，手就重了。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "buff_atk",
+            "name": "强化攻击",
+            "duration": 999,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "atk",
+                  "mode": "basePercent",
+                  "value": 0.15
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "buff_atk",
+                  "name": "强化攻击",
+                  "duration": 999,
+                  "tags": ["buff"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "atk",
+                        "mode": "basePercent",
+                        "value": 0.1
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_def",
+    "name": "硬壁",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "受得住，才打得久。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "buff_def",
+            "name": "强化防御",
+            "duration": 999,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "def",
+                  "mode": "basePercent",
+                  "value": 0.15
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "buff_def",
+                  "name": "强化防御",
+                  "duration": 999,
+                  "tags": ["buff"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "def",
+                        "mode": "basePercent",
+                        "value": 0.1
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_spd",
+    "name": "疾走",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "快一步，多一条路。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "buff_spd",
+            "name": "强化速度",
+            "duration": 999,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "spd",
+                  "mode": "basePercent",
+                  "value": 0.15
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "buff_spd",
+                  "name": "强化速度",
+                  "duration": 999,
+                  "tags": ["buff"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "spd",
+                        "mode": "basePercent",
+                        "value": 0.1
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_hp",
+    "name": "韧体",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "多撑一会儿，多一个机会。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "passive_hp_buff",
+            "name": "强健",
+            "duration": 999,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "health",
+                  "mode": "basePercent",
+                  "value": 0.2
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "passive_hp_buff_2",
+                  "name": "强健强化",
+                  "duration": 999,
+                  "tags": ["buff", "anonymous"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "health",
+                        "mode": "basePercent",
+                        "value": 0.1
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_crit",
+    "name": "寻隙",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "看准了，那就是破绽。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "passive_crit_buff",
+            "name": "锐利",
+            "duration": 999,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "crit",
+                  "mode": "baseFlat",
+                  "value": 10
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "passive_crit_buff_2",
+                  "name": "锐利强化",
+                  "duration": 999,
+                  "tags": ["buff", "anonymous"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "crit",
+                        "mode": "baseFlat",
+                        "value": 8
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_critdmg",
+    "name": "重创",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "打就打重了。省得再来一次。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "passive_critdmg_buff",
+            "name": "致命",
+            "duration": 999,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "critDmg",
+                  "mode": "baseFlat",
+                  "value": 30
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "passive_critdmg_buff_2",
+                  "name": "致命强化",
+                  "duration": 999,
+                  "tags": ["buff", "anonymous"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "critDmg",
+                        "mode": "baseFlat",
+                        "value": 20
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_dodge",
+    "name": "游走",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "打不到我，就是安全的。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "passive_dodge_buff",
+            "name": "闪身",
+            "duration": 999,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "dodge",
+                  "mode": "baseFlat",
+                  "value": 12
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "passive_dodge_buff_2",
+                  "name": "闪身强化",
+                  "duration": 999,
+                  "tags": ["buff", "anonymous"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "dodge",
+                        "mode": "baseFlat",
+                        "value": 8
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_reduction",
+    "name": "钢铁意志",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "疼就疼着。还没死。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "passive_reduction_buff",
+            "name": "韧性",
+            "duration": 999,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "damageReduction",
+                  "mode": "baseFlat",
+                  "value": 0.1
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "passive_reduction_buff_2",
+                  "name": "韧性强化",
+                  "duration": 999,
+                  "tags": ["buff", "anonymous"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "damageReduction",
+                        "mode": "baseFlat",
+                        "value": 0.08
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_armorpen",
+    "name": "凿穿",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "再厚的壳，也有缝。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "passive_armorpen_buff",
+            "name": "破甲",
+            "duration": 999,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "armorPen",
+                  "mode": "baseFlat",
+                  "value": 25
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "passive_armorpen_buff_2",
+                  "name": "破甲强化",
+                  "duration": 999,
+                  "tags": ["buff", "anonymous"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "armorPen",
+                        "mode": "baseFlat",
+                        "value": 15
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "passive_hit",
+    "name": "鹰眼",
+    "role": "passive",
+    "tags": [],
+    "multiplier": 0,
+    "note": "看准了，才不会打空。",
+    "effects": [
+      {
+        "when": "mount",
+        "target": "self",
+        "behavior": {
+          "kind": "buff",
+          "data": {
+            "id": "passive_hit_buff",
+            "name": "精准",
+            "duration": 999,
+            "tags": ["buff"],
+            "effects": [
+              {
+                "when": "mount",
+                "behavior": {
+                  "kind": "propMod",
+                  "stat": "hit",
+                  "mode": "baseFlat",
+                  "value": 15
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "upgrades": [
+      {
+        "type": "depth",
+        "delta": {
+          "addEffects": [
+            {
+              "when": "mount",
+              "target": "self",
+              "behavior": {
+                "kind": "buff",
+                "data": {
+                  "id": "passive_hit_buff_2",
+                  "name": "精准强化",
+                  "duration": 999,
+                  "tags": ["buff", "anonymous"],
+                  "effects": [
+                    {
+                      "when": "mount",
+                      "behavior": {
+                        "kind": "propMod",
+                        "stat": "hit",
+                        "mode": "baseFlat",
+                        "value": 10
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

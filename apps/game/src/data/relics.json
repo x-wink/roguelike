@@ -1,0 +1,50 @@
+[
+  {
+    "id": "iron_will",
+    "name": "铁意",
+    "description": "最大生命值 +20",
+    "rarity": "common",
+    "effects": [{ "kind": "maxHpFlat", "amount": 20 }]
+  },
+  {
+    "id": "calm_core",
+    "name": "冷核",
+    "description": "最大理智 +20",
+    "rarity": "common",
+    "effects": [{ "kind": "maxSanFlat", "amount": 20 }]
+  },
+  {
+    "id": "blood_currency",
+    "name": "血酬",
+    "description": "每场战斗胜利额外获得 10 金币",
+    "rarity": "common",
+    "effects": [{ "kind": "goldBonus", "amount": 10 }]
+  },
+  {
+    "id": "ancient_fang",
+    "name": "古牙",
+    "description": "力量 +3",
+    "rarity": "rare",
+    "effects": [{ "kind": "statFlat", "stat": "str", "amount": 3 }]
+  },
+  {
+    "id": "ember_core",
+    "name": "烬核",
+    "description": "最大气力 +20，最大生命 +10",
+    "rarity": "rare",
+    "effects": [
+      { "kind": "maxEnergyFlat", "amount": 20 },
+      { "kind": "maxHpFlat", "amount": 10 }
+    ]
+  },
+  {
+    "id": "void_echo",
+    "name": "渊响",
+    "description": "幸运 +3，每场战斗胜利额外获得 20 金币",
+    "rarity": "epic",
+    "effects": [
+      { "kind": "statFlat", "stat": "lck", "amount": 3 },
+      { "kind": "goldBonus", "amount": 20 }
+    ]
+  }
+]
