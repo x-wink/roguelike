@@ -17,6 +17,10 @@ export interface MapNode {
   zoneId: ZoneId
   /** 进入战斗节点时附加的变异词条 id 列表 */
   appliedMutations?: string[]
+  /** 地图行索引（0-based），同一行的节点为并列分支选项 */
+  row: number
+  /** 同行中的列索引（0-based） */
+  col: number
 }
 
 /** 状态机：home=主界面枢纽 / map=节点选择 / story=剧情演出 / relic-pick=遗物选取 / skill-pick=强化候选三选一 / result=结局界面，其余与 NodeType 同名节点对应 */

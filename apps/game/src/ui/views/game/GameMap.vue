@@ -1,47 +1,74 @@
 <template>
-  <div class="node-list">
-    <div v-for="(node, i) in game.nodes" :key="node.id" class="node-row">
-      <!-- 步骤点 -->
-      <div class="step-col">
-        <div class="step-dot" :class="stepDotClass(node)">
-          <span v-if="node.completed">✓</span>
-          <span v-else>{{ i + 1 }}</span>
-        </div>
-        <div
-          v-if="i < game.nodes.length - 1"
-          class="step-line"
-          :class="node.completed ? 'step-line--done' : ''"
-        />
+  <div class="map-container">
+    <div v-for="row in uniqueRows" :key="row" class="map-section">
+      <!-- 行间连接线 -->
+      <div v-if="row > 0" class="row-connector">
+        <div class="connector-line" />
+        <span class="connector-arrow">↓</span>
       </div>
 
-      <!-- 节点卡片 -->
-      <button
-        class="node-card"
-        :class="nodeCardClass(node)"
-        :disabled="node.id !== game.currentNode?.id || node.completed"
-        @click="game.enterNode()"
-      >
-        <div class="node-info">
-          <span class="node-icon">{{ nodeIcon(node.type) }}</span>
-          <div>
-            <div class="node-label">{{ nodeLabel(node.type) }}</div>
-            <div class="node-desc">{{ nodeDesc(node.type) }}</div>
-          </div>
-        </div>
-        <span v-if="node.id === game.currentNode?.id && !node.completed" class="node-cta"
-          >进入 →</span
+      <!-- 该行所有节点 -->
+      <div class="row-nodes" :class="rowClass(row)">
+        <button
+          v-for="node in nodesInRow(row)"
+          :key="node.id"
+          class="node-card"
+          :class="nodeCardClass(node)"
+          :disabled="!isSelectable(node)"
+          @click="isSelectable(node) && game.enterNode(node.id)"
         >
-        <span v-else-if="node.completed" class="node-done">完成</span>
-      </button>
+          <div class="node-info">
+            <span class="node-icon">{{ nodeIcon(node.type) }}</span>
+            <div>
+              <div class="node-label">{{ nodeLabel(node.type) }}</div>
+              <div class="node-desc">{{ nodeDesc(node.type) }}</div>
+            </div>
+          </div>
+          <span v-if="isSelectable(node)" class="node-cta">选择 →</span>
+          <span v-else-if="node.completed" class="node-done">✓</span>
+          <span v-else-if="wasSkipped(node)" class="node-skip">—</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useGameStore } from '@/store/game'
 import type { NodeType, MapNode } from '@/game/meta'
 
 const game = useGameStore()
+
+const uniqueRows = computed(() => {
+  const rows = [...new Set(game.nodes.map((n) => n.row))].sort((a, b) => a - b)
+  return rows
+})
+
+function nodesInRow(row: number): MapNode[] {
+  return game.nodes.filter((n) => n.row === row).sort((a, b) => a.col - b.col)
+}
+
+function isSelectable(node: MapNode): boolean {
+  return node.row === game.currentRow && !node.completed
+}
+
+function wasSkipped(node: MapNode): boolean {
+  return node.row < game.currentRow && !node.completed
+}
+
+function rowClass(row: number): string {
+  if (row < game.currentRow) return 'row-nodes--past'
+  if (row === game.currentRow) return 'row-nodes--current'
+  return 'row-nodes--future'
+}
+
+function nodeCardClass(node: MapNode): string {
+  if (node.completed) return 'node-card--done'
+  if (wasSkipped(node)) return 'node-card--skipped'
+  if (isSelectable(node)) return 'node-card--choice'
+  return 'node-card--locked'
+}
 
 function nodeIcon(type: NodeType) {
   return { battle: '⚔️', elite: '💀', boss: '👁', rest: '🌿', event: '?', shop: '◇' }[type]
@@ -68,93 +95,67 @@ function nodeDesc(type: NodeType) {
     shop: '购买道具',
   }[type]
 }
-
-function stepDotClass(node: MapNode) {
-  if (node.completed) return 'step-dot--done'
-  if (node.id === game.currentNode?.id) return 'step-dot--active'
-  return 'step-dot--pending'
-}
-
-function nodeCardClass(node: MapNode) {
-  if (node.completed) return 'node-card--done'
-  if (node.id === game.currentNode?.id) return 'node-card--active'
-  return 'node-card--locked'
-}
 </script>
 
 <style scoped>
-.node-list {
+.map-container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0;
   padding: 1rem;
   overflow-y: auto;
   background: #2e2e2e;
+  gap: 0;
 }
 
-.node-row {
-  display: flex;
-  align-items: stretch;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
-}
-
-/* ── Step indicator ─────────────────────── */
-.step-col {
+/* ── 行间连接 ──────────────────────────── */
+.row-connector {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 1.75rem;
-  flex-shrink: 0;
+  padding: 0.25rem 0;
 }
 
-.step-dot {
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.72rem;
-  font-family: 'Jersey25', monospace;
-  flex-shrink: 0;
-}
-
-.step-dot--done {
-  background: #404040;
-  color: #777;
-}
-
-.step-dot--active {
-  background: #c0392b;
-  color: #fff;
-}
-
-.step-dot--pending {
-  background: #383838;
-  color: #555;
-}
-
-.step-line {
+.connector-line {
   width: 1px;
-  flex: 1;
-  min-height: 0.75rem;
-  margin: 3px 0;
+  height: 0.75rem;
   background: #404040;
 }
 
-.step-line--done {
-  background: #505050;
+.connector-arrow {
+  font-size: 0.65rem;
+  color: #505050;
+  line-height: 1;
 }
 
-/* ── Node card ──────────────────────────── */
+/* ── 节点行 ─────────────────────────────── */
+.row-nodes {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.row-nodes--current .node-card--choice {
+  border-color: #555;
+  background: #383838;
+}
+
+.row-nodes--past {
+  opacity: 0.7;
+}
+
+.row-nodes--future {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ── 节点卡片 ────────────────────────────── */
 .node-card {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 0.85rem;
   border-radius: 6px;
   border: 1px solid #404040;
   text-align: left;
@@ -163,68 +164,83 @@ function nodeCardClass(node: MapNode) {
     background 0.15s,
     box-shadow 0.15s;
   gap: 0.5rem;
+  min-width: 0;
+}
+
+.node-card--choice {
+  cursor: pointer;
+}
+
+.node-card--choice:hover {
+  border-color: rgba(192, 57, 43, 0.7);
+  background: #3a3030;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .node-card--done {
   background: #2a2a2a;
-  border-color: #383838;
-  opacity: 0.55;
-  cursor: default;
+  border-color: #404040;
 }
 
-.node-card--active {
-  background: #383838;
-  border-color: #555;
-  cursor: pointer;
-}
-
-.node-card--active:hover {
-  border-color: rgba(192, 57, 43, 0.6);
-  background: #3a3030;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+.node-card--skipped {
+  background: #262626;
+  border-color: #333;
+  opacity: 0.5;
 }
 
 .node-card--locked {
   background: #2a2a2a;
   border-color: #383838;
-  opacity: 0.5;
   cursor: default;
 }
 
 .node-info {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
+  min-width: 0;
 }
 
 .node-icon {
   font-size: 1rem;
+  flex-shrink: 0;
 }
 
 .node-label {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 500;
   color: #d8d5d0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .node-desc {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: #777;
-  margin-top: 0.15rem;
+  margin-top: 0.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .node-cta {
   font-family: 'Jersey25', monospace;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   letter-spacing: 0.1em;
   color: #c0392b;
   flex-shrink: 0;
 }
 
 .node-done {
-  font-family: 'Jersey25', monospace;
-  font-size: 0.68rem;
+  font-size: 0.85rem;
   color: #555;
+  flex-shrink: 0;
+}
+
+.node-skip {
+  font-size: 0.85rem;
+  color: #404040;
   flex-shrink: 0;
 }
 </style>

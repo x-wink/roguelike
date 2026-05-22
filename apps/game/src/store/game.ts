@@ -56,12 +56,13 @@ import router from '@/router'
 const STORE_KEY = 'crucible:store'
 
 type StoreSnap = {
-  v: 5
+  v: 6
   phase: GamePhase
   result: GameResult
   activeZone: ZoneId | null
   nodes: MapNode[]
-  idx: number
+  row: number
+  activeNodeId: string | null
   pending: boolean
   event: GameEvent | null
   shop: ShopItem[]
@@ -120,7 +121,8 @@ export const useGameStore = defineStore('game', () => {
   const activeZone = ref<ZoneId | null>(null)
   const player = shallowRef<Player>(makePlayer())
   const nodes = ref<MapNode[]>([])
-  const currentNodeIndex = ref(0)
+  const currentRow = ref(0)
+  const activeNodeId = ref<string | null>(null)
   const pendingAdvance = ref(false)
   const skillCandidates = shallowRef<SkillCandidate[]>([])
   const relicCandidates = shallowRef<RelicData[]>([])
@@ -228,7 +230,9 @@ export const useGameStore = defineStore('game', () => {
     return session && e ? getUnitActionTime(session, e.id) : 0
   })
 
-  const currentNode = computed(() => nodes.value[currentNodeIndex.value] ?? null)
+  const currentNode = computed(() =>
+    activeNodeId.value ? (nodes.value.find((n) => n.id === activeNodeId.value) ?? null) : null,
+  )
 
   function _notify() {
     triggerRef(player)
@@ -246,12 +250,13 @@ export const useGameStore = defineStore('game', () => {
       // 玩家刷新后落在主菜单，剧情靠手动重放。
       const persistPhase: GamePhase = phase.value === 'story' ? 'home' : phase.value
       const snap: StoreSnap = {
-        v: 5,
+        v: 6,
         phase: persistPhase,
         result: result.value,
         activeZone: activeZone.value,
         nodes: nodes.value,
-        idx: currentNodeIndex.value,
+        row: currentRow.value,
+        activeNodeId: activeNodeId.value,
         pending: pendingAdvance.value,
         event: currentEvent.value,
         shop: shopItems.value,
@@ -281,7 +286,7 @@ export const useGameStore = defineStore('game', () => {
       const raw = localStorage.getItem(STORE_KEY)
       if (!raw) return false
       const snap = JSON.parse(raw) as StoreSnap
-      if (snap.v !== 5) {
+      if (snap.v !== 6) {
         // 旧版本/脏数据：直接清理，避免每次启动都走解析失败路径。
         localStorage.removeItem(STORE_KEY)
         return false
@@ -310,7 +315,8 @@ export const useGameStore = defineStore('game', () => {
 
       if (snap.activeZone !== null) {
         nodes.value = snap.nodes
-        currentNodeIndex.value = snap.idx
+        currentRow.value = snap.row ?? 0
+        activeNodeId.value = snap.activeNodeId ?? null
         pendingAdvance.value = snap.pending
         currentEvent.value = snap.event
         shopItems.value = snap.shop as ShopItem[]
@@ -364,8 +370,9 @@ export const useGameStore = defineStore('game', () => {
     player.value = createPlayerFromSnapshot(pData, pSnap as UnitSnapshot)
 
     activeZone.value = zoneId
-    nodes.value = makeSessionNodes(zoneId)
-    currentNodeIndex.value = 0
+    nodes.value = makeSessionNodes(zoneId, srand)
+    currentRow.value = 0
+    activeNodeId.value = null
     pendingAdvance.value = false
     skillCandidates.value = []
     relicCandidates.value = []
@@ -385,7 +392,8 @@ export const useGameStore = defineStore('game', () => {
     player.value = globalPlayer.value
     activeZone.value = null
     nodes.value = []
-    currentNodeIndex.value = 0
+    currentRow.value = 0
+    activeNodeId.value = null
     pendingAdvance.value = false
     skillCandidates.value = []
     relicCandidates.value = []
@@ -404,9 +412,10 @@ export const useGameStore = defineStore('game', () => {
 
   // ── 地图节点 ──────────────────────────────────────────────────────────────
 
-  function enterNode() {
-    const node = currentNode.value
+  function enterNode(nodeId: string) {
+    const node = nodes.value.find((n) => n.id === nodeId && n.row === currentRow.value)
     if (!node) return
+    activeNodeId.value = nodeId
     if (node.type === 'rest') {
       phase.value = 'rest'
     } else if (node.type === 'event') {
@@ -543,10 +552,10 @@ export const useGameStore = defineStore('game', () => {
       return
     }
 
-    nodes.value[currentNodeIndex.value].completed = true
+    const node = currentNode.value
+    if (node) node.completed = true
 
     // 计算并发放金币
-    const node = currentNode.value
     const baseGold = node?.enemyId ? (ENEMIES[node.enemyId]?.goldDrop ?? 0) : 0
     const goldMult = (node?.appliedMutations ?? []).reduce(
       (acc, mid) => acc * (MUTATIONS[mid]?.goldMultiplier ?? 1),
@@ -575,7 +584,8 @@ export const useGameStore = defineStore('game', () => {
     if (!ev) return
     applyEventEffect(ev.options[optionIndex].effect, player.value)
     currentEvent.value = null
-    nodes.value[currentNodeIndex.value].completed = true
+    const evNode = currentNode.value
+    if (evNode) evNode.completed = true
     _notify()
     _advanceNode()
   }
@@ -586,14 +596,16 @@ export const useGameStore = defineStore('game', () => {
     if (!player.value.backpack.spendGold(item.cost)) return
     applyEventEffect(item.effect, player.value)
     shopItems.value = []
-    nodes.value[currentNodeIndex.value].completed = true
+    const shopNode = currentNode.value
+    if (shopNode) shopNode.completed = true
     _notify()
     _advanceNode()
   }
 
   function skipShop() {
     shopItems.value = []
-    nodes.value[currentNodeIndex.value].completed = true
+    const skipNode = currentNode.value
+    if (skipNode) skipNode.completed = true
     _advanceNode()
   }
 
@@ -675,7 +687,8 @@ export const useGameStore = defineStore('game', () => {
   function restHeal() {
     player.value.health.add(Math.floor(player.value.health.max * 0.3))
     _notify()
-    nodes.value[currentNodeIndex.value].completed = true
+    const restNode = currentNode.value
+    if (restNode) restNode.completed = true
     _advanceNode()
   }
 
@@ -689,7 +702,8 @@ export const useGameStore = defineStore('game', () => {
       p.pool.update(applyUpgrade(skill, { multiplier: 0.1 }))
       _notify()
     }
-    nodes.value[currentNodeIndex.value].completed = true
+    const upgradeNode = currentNode.value
+    if (upgradeNode) upgradeNode.completed = true
     _advanceNode()
   }
 
@@ -704,11 +718,13 @@ export const useGameStore = defineStore('game', () => {
   // ── 节点推进 ──────────────────────────────────────────────────────────────
 
   function _advanceNode() {
-    if (currentNodeIndex.value < nodes.value.length - 1) {
-      currentNodeIndex.value++
+    activeNodeId.value = null
+    const maxRow = nodes.value.reduce((m, n) => Math.max(m, n.row), -1)
+    if (currentRow.value < maxRow) {
+      currentRow.value++
       phase.value = 'map'
     } else {
-      // session 全部节点完成（最后一个节点不是 boss 时走到这里，常规路径由 _onBattleWin 直接结算 boss）
+      // 所有行完成（boss 以外的最后一行，常规路径由 _onBattleWin 直接结算 boss）
       _markZoneCleared()
       phase.value = 'result'
       result.value = { kind: 'victory', reason: 'session-clear' }
@@ -764,7 +780,7 @@ export const useGameStore = defineStore('game', () => {
     result,
     player,
     nodes,
-    currentNodeIndex,
+    currentRow,
     currentNode,
     activeZone,
     enemy,

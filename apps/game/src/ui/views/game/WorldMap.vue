@@ -23,7 +23,7 @@
         <div class="zone-meta">
           <span v-if="isCleared(zone.id)" class="zone-tag zone-tag--cleared">已通</span>
           <span v-else-if="isUnlocked(zone.id)" class="zone-tag zone-tag--open"
-            >{{ nodeCount(zone.id) }} 节点</span
+            >{{ rowCount(zone.id) }} 行</span
           >
           <span v-else class="zone-tag zone-tag--locked">锁定</span>
           <span v-if="isUnlocked(zone.id)" class="zone-enter">进入 →</span>
@@ -35,30 +35,12 @@
 
 <script setup lang="ts">
 import { useGameStore } from '@/store/game'
-import { ZONE_NODES, type ZoneId } from '@/game/meta'
+import { ZONE_META, ZONE_ORDER, getZoneRowRange, type ZoneId } from '@/game/meta'
 
 const emit = defineEmits<{ select: [zone: ZoneId] }>()
 const game = useGameStore()
 
-const ZONES = [
-  { id: 'wasteland' as ZoneId, name: '荒渊', subtitle: '外围废墟带', desc: '新至者 · 渊虫' },
-  {
-    id: 'wandering' as ZoneId,
-    name: '游渊',
-    subtitle: '游荡地带',
-    desc: '多轮存活者 · 无名参与者',
-  },
-  { id: 'wall' as ZoneId, name: '壁渊', subtitle: '渊正壁垒带', desc: '渊正 · 穿越需代价' },
-  {
-    id: 'settlement' as ZoneId,
-    name: '驻渊',
-    subtitle: '内驻地带',
-    desc: '掌柜 · 缝合者 · 记录者 · 修补者',
-  },
-  { id: 'apex' as ZoneId, name: '天渊', subtitle: '', desc: '天渊·先遣' },
-] as const
-
-const ZONE_ORDER: ZoneId[] = ['wasteland', 'wandering', 'wall', 'settlement', 'apex']
+const ZONES = ZONE_ORDER.map((id) => ZONE_META[id])
 
 function isUnlocked(id: ZoneId): boolean {
   const idx = ZONE_ORDER.indexOf(id)
@@ -70,8 +52,8 @@ function isCleared(id: ZoneId): boolean {
   return game.clearedZones.includes(id)
 }
 
-function nodeCount(id: ZoneId): number {
-  return ZONE_NODES[id].length
+function rowCount(id: ZoneId): number {
+  return getZoneRowRange(id).min
 }
 </script>
 

@@ -490,5 +490,400 @@
       }
     ],
     "tags": ["dummy", "gambler"]
+  },
+  "wanderer": {
+    "id": "wanderer",
+    "name": "流浪者",
+    "health": 65,
+    "energy": 70,
+    "san": 100,
+    "str": 6,
+    "con": 2,
+    "agi": 8,
+    "int": 3,
+    "lck": 6,
+    "skills": [
+      {
+        "id": "wanderer_normal",
+        "name": "洗劫",
+        "tags": ["attack"],
+        "multiplier": 1.0,
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": { "kind": "heal", "stat": "energy", "value": 12 }
+          }
+        ]
+      },
+      {
+        "id": "wanderer_ultimate",
+        "name": "围杀",
+        "role": "ultimate",
+        "tags": ["attack", "debuff"],
+        "multiplier": 1.3,
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": { "kind": "cost", "stat": "energy", "value": 70 }
+          },
+          {
+            "when": "mount",
+            "target": "enemy",
+            "behavior": {
+              "kind": "buff",
+              "data": {
+                "id": "wanderer_bleed",
+                "name": "失血",
+                "duration": 3,
+                "tags": ["debuff", "dot"],
+                "effects": [
+                  {
+                    "when": "turnStart",
+                    "behavior": { "kind": "stat", "prop": "health", "amount": -5 }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "tags": ["normal"],
+    "goldDrop": 20,
+    "mutationChance": 0.35
+  },
+  "boss_wandering": {
+    "id": "boss_wandering",
+    "name": "游渊·无名者",
+    "health": 155,
+    "energy": 85,
+    "san": 100,
+    "str": 9,
+    "con": 3,
+    "agi": 9,
+    "int": 4,
+    "lck": 7,
+    "skills": [
+      {
+        "id": "boss_wandering_normal",
+        "name": "熬过去",
+        "tags": ["attack"],
+        "multiplier": 1.0,
+        "triggers": [
+          {
+            "on": "onHit",
+            "effects": [
+              {
+                "when": "mount",
+                "target": "self",
+                "behavior": { "kind": "heal", "stat": "health", "value": 8 }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "boss_wandering_ultimate",
+        "name": "孤注一掷",
+        "role": "ultimate",
+        "tags": ["attack"],
+        "multiplier": 1.8,
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": { "kind": "cost", "stat": "energy", "value": 80 }
+          },
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": { "kind": "cost", "stat": "san", "value": 30 }
+          }
+        ]
+      }
+    ],
+    "isBoss": true,
+    "sanPressure": 4,
+    "damageReduction": 0.1,
+    "tags": ["boss"],
+    "goldDrop": 70,
+    "mutationChance": 0.5
+  },
+  "warden_guard": {
+    "id": "warden_guard",
+    "name": "渊正·守卫",
+    "health": 70,
+    "energy": 70,
+    "san": 100,
+    "str": 6,
+    "con": 2,
+    "agi": 7,
+    "int": 3,
+    "lck": 5,
+    "skills": [
+      {
+        "id": "warden_guard_normal",
+        "name": "警戒",
+        "tags": ["attack"],
+        "multiplier": 0.95,
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": { "kind": "heal", "stat": "energy", "value": 14 }
+          }
+        ]
+      },
+      {
+        "id": "warden_guard_ultimate",
+        "name": "惩处",
+        "role": "ultimate",
+        "tags": ["attack", "debuff"],
+        "multiplier": 1.2,
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": { "kind": "cost", "stat": "energy", "value": 70 }
+          },
+          {
+            "when": "mount",
+            "target": "enemy",
+            "behavior": {
+              "kind": "buff",
+              "data": {
+                "id": "warden_slow",
+                "name": "迟滞",
+                "duration": 2,
+                "tags": ["debuff"],
+                "effects": [
+                  {
+                    "when": "mount",
+                    "behavior": {
+                      "kind": "propMod",
+                      "stat": "spd",
+                      "mode": "basePercent",
+                      "value": -0.2
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "tags": ["normal"],
+    "goldDrop": 22,
+    "mutationChance": 0.4
+  },
+  "boss_wall": {
+    "id": "boss_wall",
+    "name": "壁渊·渊正统领",
+    "health": 170,
+    "energy": 90,
+    "san": 100,
+    "str": 10,
+    "con": 4,
+    "agi": 9,
+    "int": 4,
+    "lck": 6,
+    "skills": [
+      {
+        "id": "boss_wall_normal",
+        "name": "戒严令",
+        "tags": ["attack"],
+        "multiplier": 1.15,
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": { "kind": "heal", "stat": "energy", "value": 18 }
+          },
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": {
+              "kind": "buff",
+              "data": {
+                "id": "wall_barrier",
+                "name": "戒严",
+                "duration": 1,
+                "tags": ["buff"],
+                "effects": [
+                  {
+                    "when": "mount",
+                    "behavior": {
+                      "kind": "propMod",
+                      "stat": "damageReduction",
+                      "mode": "baseFlat",
+                      "value": 0.1
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "boss_wall_ultimate",
+        "name": "清障",
+        "role": "ultimate",
+        "tags": ["attack"],
+        "multiplier": 2.0,
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": { "kind": "cost", "stat": "energy", "value": 90 }
+          }
+        ]
+      }
+    ],
+    "isBoss": true,
+    "sanPressure": 5,
+    "damageReduction": 0.15,
+    "tags": ["boss"],
+    "goldDrop": 75,
+    "mutationChance": 0.6
+  },
+  "guardian": {
+    "id": "guardian",
+    "name": "驻渊·守门人",
+    "health": 160,
+    "energy": 80,
+    "san": 100,
+    "str": 9,
+    "con": 3,
+    "agi": 8,
+    "int": 5,
+    "lck": 7,
+    "skills": [
+      {
+        "id": "guardian_normal",
+        "name": "守门",
+        "tags": ["attack"],
+        "multiplier": 1.05,
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": { "kind": "heal", "stat": "energy", "value": 16 }
+          }
+        ]
+      },
+      {
+        "id": "guardian_ultimate",
+        "name": "最后一关",
+        "role": "ultimate",
+        "tags": ["attack", "debuff"],
+        "multiplier": 1.5,
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": { "kind": "cost", "stat": "energy", "value": 80 }
+          },
+          {
+            "when": "mount",
+            "target": "enemy",
+            "behavior": {
+              "kind": "buff",
+              "data": {
+                "id": "guardian_seal",
+                "name": "封印",
+                "duration": 2,
+                "tags": ["debuff"],
+                "effects": [
+                  {
+                    "when": "mount",
+                    "behavior": {
+                      "kind": "propMod",
+                      "stat": "str",
+                      "mode": "basePercent",
+                      "value": -0.15
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "isBoss": true,
+    "sanPressure": 4,
+    "damageReduction": 0.1,
+    "tags": ["boss"],
+    "goldDrop": 90
+  },
+  "apex_enforcer": {
+    "id": "apex_enforcer",
+    "name": "天渊·执法者",
+    "health": 90,
+    "energy": 80,
+    "san": 100,
+    "str": 9,
+    "con": 3,
+    "agi": 10,
+    "int": 5,
+    "lck": 8,
+    "skills": [
+      {
+        "id": "apex_enforcer_normal",
+        "name": "执令",
+        "tags": ["attack"],
+        "multiplier": 1.1,
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": { "kind": "heal", "stat": "energy", "value": 14 }
+          }
+        ]
+      },
+      {
+        "id": "apex_enforcer_ultimate",
+        "name": "终止令",
+        "role": "ultimate",
+        "tags": ["attack", "debuff"],
+        "multiplier": 1.7,
+        "effects": [
+          {
+            "when": "mount",
+            "target": "self",
+            "behavior": { "kind": "cost", "stat": "energy", "value": 80 }
+          },
+          {
+            "when": "mount",
+            "target": "enemy",
+            "behavior": {
+              "kind": "buff",
+              "data": {
+                "id": "apex_sanburn",
+                "name": "精神灼烧",
+                "duration": 2,
+                "tags": ["debuff", "dot"],
+                "effects": [
+                  {
+                    "when": "turnStart",
+                    "behavior": { "kind": "stat", "prop": "san", "amount": -8 }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "isElite": true,
+    "sanPressure": 4,
+    "damageReduction": 0.05,
+    "tags": ["elite"],
+    "goldDrop": 35,
+    "mutationChance": 0.5
   }
 }
