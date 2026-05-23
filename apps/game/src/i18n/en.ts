@@ -19,6 +19,13 @@ const en: Record<TKey, string> = {
   'settings.close': 'Close',
   'lang.zh': '中文',
   'lang.en': 'English',
+  'menu.title': 'Paused',
+  'menu.resume': 'Resume',
+  'menu.settings': 'Settings',
+  'menu.save': 'Save Progress',
+  'menu.save.done': 'Saved',
+  'menu.exit': 'Exit to Camp',
+  'menu.exit.confirm': 'Abandon this run and return to camp?',
 }
 
 export default en

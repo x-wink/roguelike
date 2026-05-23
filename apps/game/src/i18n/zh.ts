@@ -17,6 +17,13 @@ const zh = {
   'settings.close': '关闭',
   'lang.zh': '中文',
   'lang.en': 'English',
+  'menu.title': '暂停',
+  'menu.resume': '继续',
+  'menu.settings': '设置',
+  'menu.save': '保存进度',
+  'menu.save.done': '已保存',
+  'menu.exit': '退出至营地',
+  'menu.exit.confirm': '放弃本次探索并返回营地？',
 } as const
 
 export default zh

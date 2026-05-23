@@ -410,6 +410,10 @@ export const useGameStore = defineStore('game', () => {
   // 手动退出 session（同 endSession，语义上区分「完成/死亡结束」与「玩家主动退出」）
   const exitSession = endSession
 
+  function manualSave() {
+    _persist()
+  }
+
   // ── 地图节点 ──────────────────────────────────────────────────────────────
 
   function enterNode(nodeId: string) {
@@ -803,6 +807,7 @@ export const useGameStore = defineStore('game', () => {
     enterZone,
     endSession,
     exitSession,
+    manualSave,
     enterNode,
     resolveEvent,
     buyShopItem,
