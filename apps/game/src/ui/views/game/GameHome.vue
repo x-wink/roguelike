@@ -73,6 +73,18 @@
               <span>踏入渊</span>
               <span class="btn-arrow">→</span>
             </button>
+            <Transition name="lottery-pop">
+              <p v-if="lotteryResult" class="lottery-toast">已解锁：{{ lotteryResult }}</p>
+            </Transition>
+            <button
+              v-if="hasLockedSkills"
+              class="btn-lottery"
+              :disabled="rareCurrency < 1"
+              @click="onLottery"
+            >
+              <span class="lottery-currency">◆1</span>
+              <span>随机解锁技能</span>
+            </button>
           </div>
         </div>
 
@@ -146,9 +158,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { useGameStore } from '@/store/game'
+import { useMetaStore } from '@/store/meta'
 import { useSettingsStore } from '@/store/settings'
 import { useT } from '@/i18n'
 import type { ZoneId } from '@/game/meta'
+import { SKILL_POOL } from '@/data'
 import GameMap from './GameMap.vue'
 import WorldMap from './WorldMap.vue'
 import UnitStatsPanel from '@/ui/components/UnitStatsPanel.vue'
@@ -181,7 +195,8 @@ watch(
 const hp = computed(() => game.player.health.value)
 const san = computed(() => game.player.props.san.value)
 const gold = computed(() => game.player.backpack.gold)
-const rareCurrency = computed(() => game.player.backpack.rareCurrency)
+const meta = useMetaStore()
+const rareCurrency = computed(() => meta.rareCurrency)
 const hpPct = computed(() => Math.max(0, Math.min(100, (hp.value / game.player.health.max) * 100)))
 const sanPct = computed(() =>
   Math.max(0, Math.min(100, (san.value / game.player.props.san.max) * 100)),
@@ -272,6 +287,21 @@ function onEmberClick() {
   } while (pool.length > 1 && idx === lastDialogueIdx)
   lastDialogueIdx = idx
   currentDialogue.value = pool[idx]
+}
+
+// ── 技能抽奖 ──────────────────────────────────────────────────────────────────
+
+const lotteryResult = ref<string | null>(null)
+const hasLockedSkills = computed(() => SKILL_POOL.some((s) => !meta.isUnlocked(s.id)))
+
+function onLottery() {
+  const id = game.lotteryUnlock()
+  if (id === null) return
+  const skill = SKILL_POOL.find((s) => s.id === id)
+  lotteryResult.value = skill?.name ?? id
+  setTimeout(() => {
+    lotteryResult.value = null
+  }, 2500)
 }
 </script>
 
@@ -686,6 +716,66 @@ function onEmberClick() {
 .btn-enter:hover .btn-arrow {
   transform: translateX(3px);
   color: var(--ember-glow);
+}
+
+.btn-lottery {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  background: transparent;
+  border: 1px solid rgba(106, 163, 200, 0.3);
+  color: #6aa3c8;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s,
+    background 0.15s;
+  clip-path: polygon(
+    4px 0%,
+    calc(100% - 4px) 0%,
+    100% 4px,
+    100% calc(100% - 4px),
+    calc(100% - 4px) 100%,
+    4px 100%,
+    0% calc(100% - 4px),
+    0% 4px
+  );
+}
+
+.btn-lottery:hover:not(:disabled) {
+  border-color: rgba(106, 163, 200, 0.7);
+  color: #8dc4e8;
+  background: rgba(106, 163, 200, 0.06);
+}
+
+.btn-lottery:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.lottery-currency {
+  font-family: 'Jersey25', monospace;
+  font-size: 0.7rem;
+  color: inherit;
+}
+
+.lottery-toast {
+  font-size: 0.78rem;
+  color: #6aa3c8;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+.lottery-pop-enter-active,
+.lottery-pop-leave-active {
+  transition: opacity 0.3s;
+}
+.lottery-pop-enter-from,
+.lottery-pop-leave-to {
+  opacity: 0;
 }
 
 /* ── 地图视图 ────────────────────────────────────────── */

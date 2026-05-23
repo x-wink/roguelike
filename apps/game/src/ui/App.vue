@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue'
 import GlobalTips from '@/ui/components/GlobalTips.vue'
 import SettingsModal from '@/ui/components/SettingsModal.vue'
 import PauseMenu from '@/ui/components/PauseMenu.vue'

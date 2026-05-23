@@ -47,6 +47,7 @@ import {
 } from '@/data'
 import { Player, type PlayerData } from '@/game/units/player'
 import { Enemy } from '@/game/units/enemy'
+import { useMetaStore } from '@/store/meta'
 import { defineStore } from 'pinia'
 import { computed, ref, shallowRef, triggerRef, watch } from 'vue'
 import router from '@/router'
@@ -649,9 +650,24 @@ export const useGameStore = defineStore('game', () => {
 
   function _offerSkillPick() {
     const p = player.value
-    const candidates = buildSkillCandidates(p.pool.raw, SKILL_POOL, p.getStat('lck'), 3)
+    const meta = useMetaStore()
+    const unlockedPool = SKILL_POOL.filter((s) => meta.isUnlocked(s.id))
+    const candidates = buildSkillCandidates(p.pool.raw, unlockedPool, p.getStat('lck'), 3)
     skillCandidates.value = candidates
     phase.value = 'skill-pick'
+  }
+
+  function lotteryUnlock(): string | null {
+    const meta = useMetaStore()
+    if (!meta.spendRareCurrency(1)) return null
+    const locked = SKILL_POOL.filter((s) => !meta.isUnlocked(s.id))
+    if (locked.length === 0) {
+      meta.earnRareCurrency(1) // 全部已解锁，退款
+      return null
+    }
+    const target = locked[Math.floor(Math.random() * locked.length)]
+    meta.unlockSkill(target.id)
+    return target.id
   }
 
   function pickSkill(candidate: SkillCandidate) {
@@ -820,6 +836,7 @@ export const useGameStore = defineStore('game', () => {
     skipRelicPick,
     pickSkill,
     skipSkillPick,
+    lotteryUnlock,
     restHeal,
     restUpgradeSkill,
     arenaStartBattle,
