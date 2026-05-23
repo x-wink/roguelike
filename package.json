@@ -2,7 +2,7 @@
   "name": "rougelike",
   "private": true,
   "scripts": {
-    "prepare": "git config core.hooksPath .githooks",
+    "prepare": "git config core.hooksPath .githooks && chmod +x .githooks/*",
     "dev": "pnpm --filter @apps/game dev",
     "build": "pnpm --filter @apps/game build",
     "typecheck": "pnpm -r typecheck",
