@@ -1,8 +1,12 @@
 <template>
   <div class="flex-1 flex flex-col" style="background: #2e2e2e">
     <div class="px-5 pt-10 pb-4 border-b border-[#404040]">
-      <p class="text-[0.68rem] tracking-[0.3em] text-[#777] font-mono uppercase mb-1">Rest Point</p>
-      <h2 class="text-xl font-semibold text-[#f0eeeb]">{{ t('rest.title') }}</h2>
+      <p class="text-[0.68rem] tracking-[0.3em] text-[#777] font-mono uppercase mb-1">
+        {{ isSettlement ? NPC_DEFS['seamstress'].role : 'Rest Point' }}
+      </p>
+      <h2 class="text-xl font-semibold text-[#f0eeeb]">
+        {{ isSettlement ? NPC_DEFS['seamstress'].name : t('rest.title') }}
+      </h2>
     </div>
 
     <div class="flex-1 px-5 py-5 flex flex-col gap-3 overflow-y-auto">
@@ -21,7 +25,8 @@
       <!-- Upgrade options -->
       <div v-if="upgradableSkills.length > 0">
         <p class="text-[0.68rem] text-[#666] font-mono tracking-widest mb-2 px-1">
-          {{ t('rest.or-upgrade') }}
+          <template v-if="isSettlement">{{ NPC_DEFS['repairman'].name }} · </template
+          >{{ t('rest.or-upgrade') }}
         </p>
         <button
           v-for="skill in upgradableSkills"
@@ -47,15 +52,16 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useGameStore } from '@/store/game'
 import { useT } from '@/i18n'
 import PlayerStatusBar from '@/ui/components/PlayerStatusBar.vue'
-import { computed } from 'vue'
-
-const t = useT()
+import { NPC_DEFS } from '@/game/meta'
 import type { MultiplierDef } from '@xwink/rpg'
 
+const t = useT()
 const game = useGameStore()
+const isSettlement = computed(() => game.currentNode?.zoneId === 'settlement')
 const upgradableSkills = computed(() =>
   game.player.pool.raw.filter((s) => multVal(s.multiplier) > 0),
 )

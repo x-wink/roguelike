@@ -1,7 +1,9 @@
 <template>
   <div class="flex-1 flex flex-col" style="background: #2e2e2e">
     <div class="px-5 pt-10 pb-4 border-b border-[#404040]">
-      <p class="text-[0.68rem] tracking-[0.3em] text-[#777] font-mono uppercase mb-1">Event</p>
+      <p class="text-[0.68rem] tracking-[0.3em] text-[#777] font-mono uppercase mb-1">
+        {{ npc ? npc.role : 'Event' }}
+      </p>
       <h2 class="text-xl font-semibold text-[#f0eeeb]">{{ game.currentEvent?.name }}</h2>
     </div>
 
@@ -28,9 +30,14 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useGameStore } from '@/store/game'
 import PlayerStatusBar from '@/ui/components/PlayerStatusBar.vue'
-import { describeEventEffect } from '@/game/meta'
+import { describeEventEffect, NPC_DEFS } from '@/game/meta'
 
 const game = useGameStore()
+const npc = computed(() => {
+  const id = game.currentNode?.npcId
+  return id ? NPC_DEFS[id] : null
+})
 </script>

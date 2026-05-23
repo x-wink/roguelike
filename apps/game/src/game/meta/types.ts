@@ -2,6 +2,7 @@
 // 定义本游戏特有的状态机、节点类型、事件 / 商店效果，rpg 通用层不感知。
 
 import type { BuffData } from '@xwink/rpg'
+import type { NpcId } from './npcs'
 
 /** battle=普通战斗 / elite=精英 / boss=关卡终点 / rest=回复 / event=随机文本选择 / shop=消耗资源购买 */
 export type NodeType = 'battle' | 'elite' | 'boss' | 'rest' | 'event' | 'shop'
@@ -17,6 +18,8 @@ export interface MapNode {
   zoneId: ZoneId
   /** 进入战斗节点时附加的变异词条 id 列表 */
   appliedMutations?: string[]
+  /** 驻渊区域节点关联的 NPC，服务界面据此展示身份 */
+  npcId?: NpcId
   /** 地图行索引（0-based），同一行的节点为并列分支选项 */
   row: number
   /** 同行中的列索引（0-based） */

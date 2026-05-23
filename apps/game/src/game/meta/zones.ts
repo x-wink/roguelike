@@ -3,6 +3,7 @@
 // makeSessionNodes 接收 session 级 RNG，保证相同 seed 生成相同地图，支持存档复现。
 
 import type { MapNode, NodeType, ZoneId } from './types'
+import { SETTLEMENT_NODE_NPC } from './npcs'
 
 // ── 区域元信息 ────────────────────────────────────────────────────────────────
 
@@ -156,6 +157,7 @@ export function makeSessionNodes(zoneId: ZoneId, rng: () => number): MapNode[] {
         completed: false,
         zoneId,
         appliedMutations: [],
+        npcId: zoneId === 'settlement' ? SETTLEMENT_NODE_NPC[type] : undefined,
         row,
         col,
       })

@@ -20,8 +20,8 @@
           <div class="node-info">
             <span class="node-icon">{{ nodeIcon(node.type) }}</span>
             <div>
-              <div class="node-label">{{ nodeLabel(node.type) }}</div>
-              <div class="node-desc">{{ nodeDesc(node.type) }}</div>
+              <div class="node-label">{{ nodeLabel(node) }}</div>
+              <div class="node-desc">{{ nodeDesc(node) }}</div>
             </div>
           </div>
           <span v-if="isSelectable(node)" class="node-cta">{{ t('node.select') }}</span>
@@ -37,6 +37,7 @@
 import { computed } from 'vue'
 import { useGameStore } from '@/store/game'
 import { useT } from '@/i18n'
+import { NPC_DEFS } from '@/game/meta'
 import type { NodeType, MapNode } from '@/game/meta'
 
 const game = useGameStore()
@@ -76,7 +77,8 @@ function nodeIcon(type: NodeType) {
   return { battle: '⚔️', elite: '💀', boss: '👁', rest: '🌿', event: '?', shop: '◇' }[type]
 }
 
-function nodeLabel(type: NodeType) {
+function nodeLabel(node: MapNode) {
+  if (node.npcId) return NPC_DEFS[node.npcId].name
   const map: Record<NodeType, Parameters<typeof t>[0]> = {
     battle: 'node.battle',
     elite: 'node.elite',
@@ -85,10 +87,11 @@ function nodeLabel(type: NodeType) {
     event: 'node.event',
     shop: 'node.shop',
   }
-  return t(map[type])
+  return t(map[node.type])
 }
 
-function nodeDesc(type: NodeType) {
+function nodeDesc(node: MapNode) {
+  if (node.npcId) return NPC_DEFS[node.npcId].role
   const map: Record<NodeType, Parameters<typeof t>[0]> = {
     battle: 'node.battle.desc',
     elite: 'node.elite.desc',
@@ -97,7 +100,7 @@ function nodeDesc(type: NodeType) {
     event: 'node.event.desc',
     shop: 'node.shop.desc',
   }
-  return t(map[type])
+  return t(map[node.type])
 }
 </script>
 
