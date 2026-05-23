@@ -105,9 +105,19 @@
           <UnitStatsPanel :unit="game.player" />
         </div>
 
+        <!-- 图鉴 tab -->
+        <div v-show="activeTab === 'lore'" class="lore-tab-view">
+          <GameLore />
+        </div>
+
         <!-- 其他 tab 占位 -->
         <div
-          v-show="activeTab !== 'camp' && activeTab !== 'map' && activeTab !== 'char'"
+          v-show="
+            activeTab !== 'camp' &&
+            activeTab !== 'map' &&
+            activeTab !== 'char' &&
+            activeTab !== 'lore'
+          "
           class="placeholder-view"
         >
           <p class="placeholder-label">{{ currentTabLabel }}</p>
@@ -825,6 +835,15 @@ function onLottery() {
   flex: 1;
   overflow-y: auto;
   padding: 1rem;
+  background: var(--black);
+}
+
+/* ── 图鉴 tab ────────────────────────────────────────── */
+.lore-tab-view {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   background: var(--black);
 }
 

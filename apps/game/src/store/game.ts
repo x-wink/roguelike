@@ -638,7 +638,9 @@ export const useGameStore = defineStore('game', () => {
     applyRelicToPlayer(relic, player.value)
     relicCandidates.value = []
     triggerRef(player)
-    useMetaStore().checkAchievements({
+    const meta = useMetaStore()
+    meta.discoverRelic(relic.id)
+    meta.checkAchievements({
       totalRelicsCollected: 1,
       totalSealedRelics: relic.type === 'sealed' ? 1 : 0,
     })

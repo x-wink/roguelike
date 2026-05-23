@@ -6,11 +6,12 @@ import { computed, ref, watch } from 'vue'
 const META_KEY = 'crucible:meta'
 
 type MetaSnap = {
-  v: 2
+  v: 3
   unlockedSkillIds: string[]
   rareCurrency: number
   completedAchievementIds: string[]
   stats: AchievementStats
+  discoveredRelicIds: string[]
 }
 
 /** 初始就可用的技能——无需解锁 */
@@ -46,6 +47,7 @@ export const useMetaStore = defineStore('meta', () => {
   const rareCurrency = ref(0)
   const _completedIds = ref<Set<string>>(new Set())
   const stats = ref<AchievementStats>(defaultStats())
+  const _discoveredRelicIds = ref<Set<string>>(new Set())
 
   // 待显示的成就通知队列（瞬态，不持久化）
   const pendingAchievements = ref<AchievementDef[]>([])
@@ -55,9 +57,9 @@ export const useMetaStore = defineStore('meta', () => {
       const raw = localStorage.getItem(META_KEY)
       if (!raw) return
       const snap = JSON.parse(raw) as Partial<MetaSnap>
-      // v1 → v2 无破坏性字段变更，兼容读取
+      // v1/v2 → v3 向前兼容
       const v = snap.v as number
-      if (v !== 1 && v !== 2) return
+      if (v < 1 || v > 3) return
       if (Array.isArray(snap.unlockedSkillIds)) {
         _unlockedIds.value = new Set(snap.unlockedSkillIds)
       }
@@ -70,24 +72,30 @@ export const useMetaStore = defineStore('meta', () => {
       if (snap.stats && typeof snap.stats === 'object') {
         stats.value = { ...defaultStats(), ...snap.stats }
       }
+      if (Array.isArray(snap.discoveredRelicIds)) {
+        _discoveredRelicIds.value = new Set(snap.discoveredRelicIds)
+      }
     } catch {}
   }
 
   function _save() {
     try {
       const snap: MetaSnap = {
-        v: 2,
+        v: 3,
         unlockedSkillIds: [..._unlockedIds.value],
         rareCurrency: rareCurrency.value,
         completedAchievementIds: [..._completedIds.value],
         stats: { ...stats.value },
+        discoveredRelicIds: [..._discoveredRelicIds.value],
       }
       localStorage.setItem(META_KEY, JSON.stringify(snap))
     } catch {}
   }
 
   _load()
-  watch([_unlockedIds, rareCurrency, _completedIds, stats], _save, { deep: true })
+  watch([_unlockedIds, rareCurrency, _completedIds, stats, _discoveredRelicIds], _save, {
+    deep: true,
+  })
 
   // ── 技能解锁 ─────────────────────────────────────────────────────────────────
 
@@ -146,6 +154,19 @@ export const useMetaStore = defineStore('meta', () => {
     return pendingAchievements.value.shift()
   }
 
+  // ── 遗物图鉴 ─────────────────────────────────────────────────────────────────
+
+  const discoveredCount = computed(() => _discoveredRelicIds.value.size)
+
+  function isDiscovered(id: string): boolean {
+    return _discoveredRelicIds.value.has(id)
+  }
+
+  function discoverRelic(id: string): void {
+    if (_discoveredRelicIds.value.has(id)) return
+    _discoveredRelicIds.value = new Set([..._discoveredRelicIds.value, id])
+  }
+
   return {
     rareCurrency,
     unlockedCount,
@@ -158,5 +179,8 @@ export const useMetaStore = defineStore('meta', () => {
     checkAchievements,
     pendingAchievements,
     shiftPendingAchievement,
+    discoveredCount,
+    isDiscovered,
+    discoverRelic,
   }
 })
