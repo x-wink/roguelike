@@ -2,10 +2,10 @@
   <div class="flex-1 flex flex-col" style="background: #2e2e2e">
     <div class="px-5 pt-10 pb-4 border-b border-[#404040]">
       <p class="text-[0.68rem] tracking-[0.3em] text-[#777] font-mono uppercase mb-1">
-        {{ isSettlement ? NPC_DEFS['seamstress'].role : 'Rest Point' }}
+        {{ npc ? npc.role : 'Rest Point' }}
       </p>
       <h2 class="text-xl font-semibold text-[#f0eeeb]">
-        {{ isSettlement ? NPC_DEFS['seamstress'].name : t('rest.title') }}
+        {{ npc ? npc.name : t('rest.title') }}
       </h2>
     </div>
 
@@ -25,7 +25,7 @@
       <!-- Upgrade options -->
       <div v-if="upgradableSkills.length > 0">
         <p class="text-[0.68rem] text-[#666] font-mono tracking-widest mb-2 px-1">
-          <template v-if="isSettlement">{{ NPC_DEFS['repairman'].name }} · </template
+          <template v-if="companionNpc">{{ companionNpc.name }} · </template
           >{{ t('rest.or-upgrade') }}
         </p>
         <button
@@ -61,7 +61,14 @@ import type { MultiplierDef } from '@xwink/rpg'
 
 const t = useT()
 const game = useGameStore()
-const isSettlement = computed(() => game.currentNode?.zoneId === 'settlement')
+const npc = computed(() => {
+  const id = game.currentNode?.npcId
+  return id ? NPC_DEFS[id] : null
+})
+const companionNpc = computed(() => {
+  const cid = npc.value?.companion
+  return cid ? NPC_DEFS[cid] : null
+})
 const upgradableSkills = computed(() =>
   game.player.pool.raw.filter((s) => multVal(s.multiplier) > 0),
 )

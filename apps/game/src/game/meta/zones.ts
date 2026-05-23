@@ -212,6 +212,7 @@ export function makeSessionNodes(zoneId: ZoneId, rng: () => number): MapNode[] {
               ct === 'battle'
                 ? config.battleEnemyIds[Math.floor(rng() * config.battleEnemyIds.length)]
                 : config.eliteEnemyIds[Math.floor(rng() * config.eliteEnemyIds.length)]
+            n.npcId = undefined
           }
         }
         allCombatCount++

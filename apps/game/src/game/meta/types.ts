@@ -2,10 +2,21 @@
 // 定义本游戏特有的状态机、节点类型、事件 / 商店效果，rpg 通用层不感知。
 
 import type { BuffData } from '@xwink/rpg'
-import type { NpcId } from './npcs'
 
 /** battle=普通战斗 / elite=精英 / boss=关卡终点 / rest=回复 / event=随机文本选择 / shop=消耗资源购买 */
 export type NodeType = 'battle' | 'elite' | 'boss' | 'rest' | 'event' | 'shop'
+
+// ── NPC ───────────────────────────────────────────────────────────────────────
+
+export type NpcId = 'shopkeeper' | 'seamstress' | 'repairman' | 'chronicler'
+
+export type NpcDef = {
+  id: NpcId
+  name: string
+  role: string
+  /** 同一节点内联合提供服务的附属 NPC（如修补者随缝合者出现） */
+  companion?: NpcId
+}
 
 /** 渊的五个层级，由外向内 */
 export type ZoneId = 'wasteland' | 'wandering' | 'wall' | 'settlement' | 'apex'

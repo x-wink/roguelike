@@ -376,6 +376,7 @@ export const useGameStore = defineStore('game', () => {
     player.value = createPlayerFromSnapshot(pData, pSnap as UnitSnapshot)
 
     activeZone.value = zoneId
+    _resetSessionRng(randomSeed(), 0)
     nodes.value = makeSessionNodes(zoneId, srand)
     currentRow.value = 0
     activeNodeId.value = null
@@ -386,7 +387,6 @@ export const useGameStore = defineStore('game', () => {
     shopItems.value = []
     _battle.value = null
     result.value = null
-    _resetSessionRng(randomSeed(), 0)
 
     phase.value = 'map'
     _persist()
