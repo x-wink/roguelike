@@ -616,7 +616,11 @@ export const useGameStore = defineStore('game', () => {
   // ── 遗物选择 ──────────────────────────────────────────────────────────────
 
   function _offerRelicPick() {
-    const picks = sshuffle(RELICS).slice(0, Math.min(3, RELICS.length))
+    const nodeType = currentNode.value?.type
+    const preferredRelicType = nodeType === 'elite' ? 'sealed' : 'cut'
+    const byType = RELICS.filter((r) => r.type === preferredRelicType)
+    const pool = byType.length > 0 ? byType : RELICS
+    const picks = sshuffle(pool).slice(0, Math.min(3, pool.length))
     if (picks.length === 0) {
       // 无候选直接跳过，避免 UI 卡死在空 relic-pick 阶段。
       _offerSkillPick()

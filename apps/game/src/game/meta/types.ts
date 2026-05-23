@@ -81,6 +81,9 @@ export type ShopItem = {
 
 export type RelicRarity = 'common' | 'rare' | 'epic'
 
+/** 切割型：普通战斗 / 事件节点掉落；封存型：精英 / 渊正掉落 */
+export type RelicType = 'cut' | 'sealed'
+
 export type RelicEffect =
   | { kind: 'maxHpFlat'; amount: number }
   | { kind: 'maxEnergyFlat'; amount: number }
@@ -92,7 +95,10 @@ export type RelicData = {
   id: string
   name: string
   description: string
+  /** 记忆文本，选取前封印，选取后永久收录图鉴 */
+  lore: string
   rarity: RelicRarity
+  type: RelicType
   effects: RelicEffect[]
 }
 

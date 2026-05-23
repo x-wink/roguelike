@@ -11,14 +11,20 @@
         v-for="relic in game.relicCandidates"
         :key="relic.id"
         class="relic-card"
-        :class="`rarity--${relic.rarity}`"
+        :class="[`rarity--${relic.rarity}`, `type--${relic.type}`]"
         @click="game.pickRelic(relic)"
       >
         <div class="card-top">
           <span class="card-name">{{ relic.name }}</span>
-          <span class="card-rarity">{{ RARITY_LABEL[relic.rarity] }}</span>
+          <span class="card-badges">
+            <span class="card-type" :class="`type-label--${relic.type}`">
+              {{ TYPE_LABEL[relic.type] }}
+            </span>
+            <span class="card-rarity">{{ RARITY_LABEL[relic.rarity] }}</span>
+          </span>
         </div>
         <p class="card-desc">{{ relic.description }}</p>
+        <p class="card-lore">▓▓▓▓▓▓▓▓▓▓▓▓</p>
       </button>
     </div>
 
@@ -33,7 +39,7 @@
 <script setup lang="ts">
 import { useGameStore } from '@/store/game'
 import PlayerStatusBar from '@/ui/components/PlayerStatusBar.vue'
-import type { RelicRarity } from '@/game/meta'
+import type { RelicRarity, RelicType } from '@/game/meta'
 
 const game = useGameStore()
 
@@ -41,6 +47,11 @@ const RARITY_LABEL: Record<RelicRarity, string> = {
   common: '普通',
   rare: '稀有',
   epic: '史诗',
+}
+
+const TYPE_LABEL: Record<RelicType, string> = {
+  cut: '切割型',
+  sealed: '封存型',
 }
 </script>
 
@@ -146,6 +157,32 @@ const RARITY_LABEL: Record<RelicRarity, string> = {
   color: #f0eeeb;
 }
 
+.card-badges {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.card-type {
+  font-family: 'Jersey25', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  padding: 0.1em 0.4em;
+  border-radius: 2px;
+}
+
+.type-label--cut {
+  color: #c8864a;
+  background: rgba(200, 134, 74, 0.1);
+  border: 1px solid rgba(200, 134, 74, 0.25);
+}
+
+.type-label--sealed {
+  color: #6aa3c8;
+  background: rgba(106, 163, 200, 0.1);
+  border: 1px solid rgba(106, 163, 200, 0.25);
+}
+
 .card-rarity {
   font-family: 'Jersey25', monospace;
   font-size: 0.6rem;
@@ -166,8 +203,16 @@ const RARITY_LABEL: Record<RelicRarity, string> = {
   font-size: 0.82rem;
   line-height: 1.55;
   color: #999;
-  margin: 0;
+  margin: 0 0 0.45rem;
   letter-spacing: 0.04em;
+}
+
+.card-lore {
+  font-size: 0.72rem;
+  color: #3a3a3a;
+  margin: 0;
+  letter-spacing: 0.05em;
+  user-select: none;
 }
 
 .relic-footer {
