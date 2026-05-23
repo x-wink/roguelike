@@ -16,10 +16,7 @@
         :visible="menuOpen"
         :can-exit="game.phase !== 'home'"
         @close="menuOpen = false"
-        @open-settings="
-          menuOpen = false
-          settings.panelOpen = true
-        "
+        @open-settings="onOpenSettings"
       />
     </template>
     <template v-else-if="showSettingsBtn">
@@ -75,6 +72,11 @@ const showSettingsBtn = computed(() => game.phase === 'home')
 watch(inSession, (v) => {
   if (!v) menuOpen.value = false
 })
+
+function onOpenSettings() {
+  menuOpen.value = false
+  settings.panelOpen = true
+}
 
 function onKeyDown(e: KeyboardEvent) {
   if (e.key !== 'Escape') return
