@@ -388,6 +388,7 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function endSession() {
+    useMetaStore().checkAchievements({ totalRuns: 1 })
     // session 数据销毁，全局属性不受影响
     runCount.value++
     player.value = globalPlayer.value
@@ -550,6 +551,7 @@ export const useGameStore = defineStore('game', () => {
 
   function _onBattleWin() {
     _notify()
+    useMetaStore().checkAchievements({ totalBattleWins: 1 })
 
     if (_isArena.value) {
       phase.value = 'result'
@@ -636,6 +638,10 @@ export const useGameStore = defineStore('game', () => {
     applyRelicToPlayer(relic, player.value)
     relicCandidates.value = []
     triggerRef(player)
+    useMetaStore().checkAchievements({
+      totalRelicsCollected: 1,
+      totalSealedRelics: relic.type === 'sealed' ? 1 : 0,
+    })
     _offerSkillPick()
     _persist()
   }
@@ -667,6 +673,7 @@ export const useGameStore = defineStore('game', () => {
     }
     const target = locked[Math.floor(Math.random() * locked.length)]
     meta.unlockSkill(target.id)
+    meta.checkAchievements({ totalLotteryUnlocks: 1 })
     return target.id
   }
 
@@ -696,6 +703,7 @@ export const useGameStore = defineStore('game', () => {
         upgraded.upgradeLevel = (skill.upgradeLevel ?? 0) + 1
         p.pool.update(upgraded)
       }
+      useMetaStore().checkAchievements({ totalUpgrades: 1 })
     }
     skillCandidates.value = []
     _advanceNode()
@@ -737,6 +745,7 @@ export const useGameStore = defineStore('game', () => {
     const zone = activeZone.value
     if (!zone || clearedZones.value.includes(zone)) return
     clearedZones.value = [...clearedZones.value, zone]
+    useMetaStore().checkAchievements({ clearedZones: [zone] })
   }
 
   // ── 节点推进 ──────────────────────────────────────────────────────────────

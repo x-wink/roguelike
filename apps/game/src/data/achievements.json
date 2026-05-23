@@ -1,0 +1,66 @@
+[
+  {
+    "id": "ach_first_blood",
+    "name": "初战",
+    "description": "赢得第一场战斗",
+    "rareCurrency": 1,
+    "title": "初涉者",
+    "condition": { "kind": "statGte", "stat": "totalBattleWins", "value": 1 }
+  },
+  {
+    "id": "ach_survivor",
+    "name": "渊归",
+    "description": "完成一次探索",
+    "rareCurrency": 1,
+    "title": "归渊者",
+    "condition": { "kind": "statGte", "stat": "totalRuns", "value": 1 }
+  },
+  {
+    "id": "ach_wasteland_clear",
+    "name": "荒渊告别",
+    "description": "首次通关荒渊",
+    "rareCurrency": 2,
+    "title": "破渊者",
+    "condition": { "kind": "zoneCleared", "zoneId": "wasteland" }
+  },
+  {
+    "id": "ach_relic_collector",
+    "name": "记忆拾取",
+    "description": "累计获得 5 件遗物",
+    "rareCurrency": 1,
+    "title": "拾忆者",
+    "condition": { "kind": "statGte", "stat": "totalRelicsCollected", "value": 5 }
+  },
+  {
+    "id": "ach_sealed_keeper",
+    "name": "守护者的遗存",
+    "description": "获得第一件封存型遗物",
+    "rareCurrency": 1,
+    "title": "封存者",
+    "condition": { "kind": "statGte", "stat": "totalSealedRelics", "value": 1 }
+  },
+  {
+    "id": "ach_skill_shaper",
+    "name": "磨砺",
+    "description": "累计升级技能 5 次",
+    "rareCurrency": 1,
+    "title": "磨砺者",
+    "condition": { "kind": "statGte", "stat": "totalUpgrades", "value": 5 }
+  },
+  {
+    "id": "ach_veteran",
+    "name": "常客",
+    "description": "完成 10 次探索",
+    "rareCurrency": 2,
+    "title": "渊中常客",
+    "condition": { "kind": "statGte", "stat": "totalRuns", "value": 10 }
+  },
+  {
+    "id": "ach_unlock_pioneer",
+    "name": "深掘",
+    "description": "通过抽奖首次解锁技能",
+    "rareCurrency": 2,
+    "title": "开拓者",
+    "condition": { "kind": "statGte", "stat": "totalLotteryUnlocks", "value": 1 }
+  }
+]

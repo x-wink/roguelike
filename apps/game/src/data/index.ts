@@ -8,4 +8,5 @@ export {
   SHOP_ITEMS,
   RELICS,
   MUTATIONS,
+  ACHIEVEMENTS,
 } from './loader'

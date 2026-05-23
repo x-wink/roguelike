@@ -2,6 +2,7 @@
 // 从 JSON 文件加载游戏数据，运行时做最低限度的结构校验：
 // 字段缺失或类型错误时抛出 `invalid data: {file} → {field}`，禁止静默使用错误数据。
 
+import rawAchievementsJson from './achievements.json'
 import rawBuffsJson from './buffs.json'
 import rawEnemiesJson from './enemies.json'
 import rawEventsJson from './events.json'
@@ -13,6 +14,7 @@ import rawSkillsJson from './skills.json'
 import type { BuffData, EffectData, SkillData } from '@xwink/rpg'
 import type { GameEvent, MutationDef, RelicData, ShopItem } from '@/game/meta'
 import type { EnemyData } from '@/game/units/enemy'
+import type { AchievementDef } from '@/data/achievements'
 
 // ── 校验工具 ──────────────────────────────────────────────────────────────────
 
@@ -206,6 +208,29 @@ function validateMutations(raw: unknown): Record<string, MutationDef> {
   return out
 }
 
+function validateAchievements(raw: unknown): AchievementDef[] {
+  const arr = ensureArray('achievements.json', 'root', raw)
+  return arr.map((item, i) => {
+    if (!isObj(item)) fail('achievements.json', `[${i}]`)
+    ensureNonEmptyString('achievements.json', `[${i}].id`, item.id)
+    ensureNonEmptyString('achievements.json', `[${i}].name`, item.name)
+    ensureString('achievements.json', `[${i}].description`, item.description)
+    ensureNumber('achievements.json', `[${i}].rareCurrency`, item.rareCurrency)
+    const cond = item.condition
+    if (!isObj(cond)) fail('achievements.json', `[${i}].condition`)
+    const kind = ensureString('achievements.json', `[${i}].condition.kind`, cond.kind)
+    if (kind === 'statGte') {
+      ensureString('achievements.json', `[${i}].condition.stat`, cond.stat)
+      ensureNumber('achievements.json', `[${i}].condition.value`, cond.value)
+    } else if (kind === 'zoneCleared') {
+      ensureNonEmptyString('achievements.json', `[${i}].condition.zoneId`, cond.zoneId)
+    } else {
+      fail('achievements.json', `[${i}].condition.kind`)
+    }
+    return item as unknown as AchievementDef
+  })
+}
+
 // ── 导出（运行时执行校验，校验失败立即抛错）────────────────────────────────
 
 export const SKILL_POOL: SkillData[] = validateSkills(rawSkillsJson)
@@ -215,6 +240,7 @@ export const EVENT_POOL: GameEvent[] = validateEvents(rawEventsJson)
 export const SHOP_ITEMS: ShopItem[] = validateShop(rawShopJson)
 export const RELICS: RelicData[] = validateRelics(rawRelicsJson)
 export const MUTATIONS: Record<string, MutationDef> = validateMutations(rawMutationsJson)
+export const ACHIEVEMENTS: AchievementDef[] = validateAchievements(rawAchievementsJson)
 
 /** 玩家初始技能配置：按 id 从技能池取出（保持 SKILL_POOL 引用一致，便于运行时升级写回） */
 const PLAYER_START_IDS = ['normal_balanced', 'ultimate_balanced'] as const

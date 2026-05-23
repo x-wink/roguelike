@@ -2,6 +2,7 @@
   <div class="game-shell flex flex-col overflow-hidden" style="background: #2e2e2e; color: #f0eeeb">
     <RouterView />
     <GlobalTips />
+    <AchievementToast />
 
     <!-- 游戏中显示菜单按钮；home 页只显示设置齿轮 -->
     <template v-if="inSession">
@@ -44,6 +45,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue'
 import GlobalTips from '@/ui/components/GlobalTips.vue'
+import AchievementToast from '@/ui/components/AchievementToast.vue'
 import SettingsModal from '@/ui/components/SettingsModal.vue'
 import PauseMenu from '@/ui/components/PauseMenu.vue'
 import { useSettingsStore } from '@/store/settings'
