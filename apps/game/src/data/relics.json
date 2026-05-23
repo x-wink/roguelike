@@ -27,6 +27,94 @@
     "effects": [{ "kind": "goldBonus", "amount": 10 }]
   },
   {
+    "id": "severed_thought",
+    "name": "断念",
+    "description": "敏捷 +2",
+    "lore": "那一下迟疑。剜掉就快了。",
+    "rarity": "common",
+    "type": "cut",
+    "effects": [{ "kind": "statFlat", "stat": "agi", "amount": 2 }]
+  },
+  {
+    "id": "hollow_slot",
+    "name": "空档",
+    "description": "最大气力 +15",
+    "lore": "腾出来的位置，比填满的更有用。",
+    "rarity": "common",
+    "type": "cut",
+    "effects": [{ "kind": "maxEnergyFlat", "amount": 15 }]
+  },
+  {
+    "id": "old_matter",
+    "name": "旧事",
+    "description": "最大生命值 +15，最大理智 +15",
+    "lore": "带着太重。就放这里了。",
+    "rarity": "rare",
+    "type": "cut",
+    "effects": [
+      { "kind": "maxHpFlat", "amount": 15 },
+      { "kind": "maxSanFlat", "amount": 15 }
+    ]
+  },
+  {
+    "id": "discarded",
+    "name": "弃念",
+    "description": "体质 +3",
+    "lore": "一直以为放下需要理由。不在乎了，就放下了。",
+    "rarity": "rare",
+    "type": "cut",
+    "effects": [{ "kind": "statFlat", "stat": "con", "amount": 3 }]
+  },
+  {
+    "id": "unspoken",
+    "name": "哑口",
+    "description": "幸运 +2，每场战斗胜利额外获得 15 金币",
+    "lore": "本来想说的话。没说完，就这样。",
+    "rarity": "rare",
+    "type": "cut",
+    "effects": [
+      { "kind": "statFlat", "stat": "lck", "amount": 2 },
+      { "kind": "goldBonus", "amount": 15 }
+    ]
+  },
+  {
+    "id": "light_load",
+    "name": "轻装",
+    "description": "最大生命值 +15，最大理智 +15，最大气力 +10",
+    "lore": "全丢了才知道，带着的时候也没真正用过。",
+    "rarity": "epic",
+    "type": "cut",
+    "effects": [
+      { "kind": "maxHpFlat", "amount": 15 },
+      { "kind": "maxSanFlat", "amount": 15 },
+      { "kind": "maxEnergyFlat", "amount": 10 }
+    ]
+  },
+  {
+    "id": "guarded_line",
+    "name": "守节",
+    "description": "体质 +2，最大生命值 +10",
+    "lore": "就这一步，不退。没别的理由。",
+    "rarity": "common",
+    "type": "sealed",
+    "effects": [
+      { "kind": "statFlat", "stat": "con", "amount": 2 },
+      { "kind": "maxHpFlat", "amount": 10 }
+    ]
+  },
+  {
+    "id": "fixed_memory",
+    "name": "执念",
+    "description": "最大生命值 +20，力量 +1",
+    "lore": "忘了就真的没了。不能忘。",
+    "rarity": "common",
+    "type": "sealed",
+    "effects": [
+      { "kind": "maxHpFlat", "amount": 20 },
+      { "kind": "statFlat", "stat": "str", "amount": 1 }
+    ]
+  },
+  {
     "id": "ancient_fang",
     "name": "古牙",
     "description": "力量 +3",
@@ -38,13 +126,37 @@
   {
     "id": "ember_core",
     "name": "烬核",
-    "description": "最大气力 +20，最大生命 +10",
+    "description": "最大气力 +20，最大生命值 +10",
     "lore": "还有力气。留着，总有用得到的时候。",
     "rarity": "rare",
     "type": "sealed",
     "effects": [
       { "kind": "maxEnergyFlat", "amount": 20 },
       { "kind": "maxHpFlat", "amount": 10 }
+    ]
+  },
+  {
+    "id": "last_cut",
+    "name": "最后一刀",
+    "description": "力量 +3，敏捷 +1",
+    "lore": "这一刀没还出去。姿势还在。",
+    "rarity": "rare",
+    "type": "sealed",
+    "effects": [
+      { "kind": "statFlat", "stat": "str", "amount": 3 },
+      { "kind": "statFlat", "stat": "agi", "amount": 1 }
+    ]
+  },
+  {
+    "id": "soul_guard",
+    "name": "守灵",
+    "description": "最大理智 +25，体质 +2",
+    "lore": "活着是义务。不管还剩多少。",
+    "rarity": "rare",
+    "type": "sealed",
+    "effects": [
+      { "kind": "maxSanFlat", "amount": 25 },
+      { "kind": "statFlat", "stat": "con", "amount": 2 }
     ]
   },
   {
@@ -57,6 +169,32 @@
     "effects": [
       { "kind": "statFlat", "stat": "lck", "amount": 3 },
       { "kind": "goldBonus", "amount": 20 }
+    ]
+  },
+  {
+    "id": "deep_mark",
+    "name": "深印",
+    "description": "力量 +2，体质 +2，幸运 +2",
+    "lore": "怎么打都打不走。后来就不打了。",
+    "rarity": "epic",
+    "type": "sealed",
+    "effects": [
+      { "kind": "statFlat", "stat": "str", "amount": 2 },
+      { "kind": "statFlat", "stat": "con", "amount": 2 },
+      { "kind": "statFlat", "stat": "lck", "amount": 2 }
+    ]
+  },
+  {
+    "id": "molten_core",
+    "name": "熔核",
+    "description": "最大气力 +25，最大生命值 +20，最大理智 +10",
+    "lore": "烧完了，还有这些。比火更硬。",
+    "rarity": "epic",
+    "type": "sealed",
+    "effects": [
+      { "kind": "maxEnergyFlat", "amount": 25 },
+      { "kind": "maxHpFlat", "amount": 20 },
+      { "kind": "maxSanFlat", "amount": 10 }
     ]
   }
 ]
