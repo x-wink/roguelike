@@ -103,6 +103,9 @@
         <!-- 角色 tab -->
         <div v-show="activeTab === 'char'" class="char-view">
           <UnitStatsPanel :unit="game.player" />
+          <div class="mt-4">
+            <EquipmentPanel />
+          </div>
         </div>
 
         <!-- 图鉴 tab -->
@@ -176,6 +179,7 @@ import { SKILL_POOL } from '@/data'
 import GameMap from './GameMap.vue'
 import WorldMap from './WorldMap.vue'
 import UnitStatsPanel from '@/ui/components/UnitStatsPanel.vue'
+import EquipmentPanel from '@/ui/components/EquipmentPanel.vue'
 import { PROLOGUE_AWAKEN, PROLOGUE_ENCOUNTER } from '@/game/story/prologue'
 const game = useGameStore()
 const settings = useSettingsStore()

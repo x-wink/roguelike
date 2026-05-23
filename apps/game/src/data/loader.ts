@@ -5,6 +5,7 @@
 import rawAchievementsJson from './achievements.json'
 import rawBuffsJson from './buffs.json'
 import rawEnemiesJson from './enemies.json'
+import rawEquipmentsJson from './equipment.json'
 import rawEventsJson from './events.json'
 import rawMutationsJson from './mutations.json'
 import rawRelicsJson from './relics.json'
@@ -12,7 +13,7 @@ import rawShopJson from './shop.json'
 import rawSkillsJson from './skills.json'
 
 import type { BuffData, EffectData, SkillData } from '@xwink/rpg'
-import type { GameEvent, MutationDef, RelicData, ShopItem } from '@/game/meta'
+import type { EquipmentDef, GameEvent, MutationDef, RelicData, ShopItem } from '@/game/meta'
 import type { EnemyData } from '@/game/units/enemy'
 import type { AchievementDef } from '@/data/achievements'
 
@@ -153,6 +154,68 @@ function ensureNonEmptyString(file: string, path: string, v: unknown): string {
   return s
 }
 
+// ── 装备 ──────────────────────────────────────────────────────────────────────
+
+function validateEquipPassive(file: string, path: string, raw: unknown): void {
+  if (!isObj(raw)) fail(file, path)
+  if (Array.isArray(raw.mods)) {
+    raw.mods.forEach((m: unknown, j: number) => {
+      if (!isObj(m)) fail(file, `${path}.mods[${j}]`)
+      ensureString(file, `${path}.mods[${j}].stat`, m.stat)
+      ensureString(file, `${path}.mods[${j}].mode`, m.mode)
+      ensureNumber(file, `${path}.mods[${j}].value`, m.value)
+    })
+  }
+  if (Array.isArray(raw.triggers)) {
+    raw.triggers.forEach((t: unknown, j: number) => {
+      if (!isObj(t)) fail(file, `${path}.triggers[${j}]`)
+      ensureString(file, `${path}.triggers[${j}].on`, t.on)
+      const fx = ensureArray(file, `${path}.triggers[${j}].effects`, t.effects)
+      fx.forEach((e: unknown, k: number) =>
+        validateEffectData(file, `${path}.triggers[${j}].effects[${k}]`, e),
+      )
+    })
+  }
+}
+
+function validateEquipments(raw: unknown): EquipmentDef[] {
+  const arr = ensureArray('equipment.json', 'root', raw)
+  const seen = new Set<string>()
+  return arr.map((item, i) => {
+    if (!isObj(item)) fail('equipment.json', `[${i}]`)
+    const id = ensureNonEmptyString('equipment.json', `[${i}].id`, item.id)
+    if (seen.has(id)) fail('equipment.json', `[${i}].id (duplicate "${id}")`)
+    seen.add(id)
+    ensureNonEmptyString('equipment.json', `[${i}].name`, item.name)
+    ensureNonEmptyString('equipment.json', `[${i}].description`, item.description)
+    ensureNonEmptyString('equipment.json', `[${i}].lore`, item.lore)
+    const slot = ensureString('equipment.json', `[${i}].slot`, item.slot)
+    if (!['weapon', 'armor', 'accessory'].includes(slot)) fail('equipment.json', `[${i}].slot`)
+    const rarity = ensureString('equipment.json', `[${i}].rarity`, item.rarity)
+    if (!['common', 'rare', 'epic'].includes(rarity)) fail('equipment.json', `[${i}].rarity`)
+    ensureNumber('equipment.json', `[${i}].price`, item.price)
+    const affixCount = ensureNumber('equipment.json', `[${i}].affixCount`, item.affixCount)
+    if (affixCount !== 1 && affixCount !== 2) fail('equipment.json', `[${i}].affixCount`)
+    validateEquipPassive('equipment.json', `[${i}].passive`, item.passive)
+    const pool = ensureArray('equipment.json', `[${i}].affixPool`, item.affixPool)
+    if (pool.length < affixCount) {
+      fail('equipment.json', `[${i}].affixPool (length ${pool.length} < affixCount ${affixCount})`)
+    }
+    const seenAffix = new Set<string>()
+    pool.forEach((a: unknown, j: number) => {
+      if (!isObj(a)) fail('equipment.json', `[${i}].affixPool[${j}]`)
+      const aid = ensureNonEmptyString('equipment.json', `[${i}].affixPool[${j}].id`, a.id)
+      if (seenAffix.has(aid)) {
+        fail('equipment.json', `[${i}].affixPool[${j}].id (duplicate "${aid}")`)
+      }
+      seenAffix.add(aid)
+      ensureNonEmptyString('equipment.json', `[${i}].affixPool[${j}].name`, a.name)
+      validateEquipPassive('equipment.json', `[${i}].affixPool[${j}].passive`, a.passive)
+    })
+    return item as unknown as EquipmentDef
+  })
+}
+
 function validateRelicEffect(file: string, path: string, raw: unknown): void {
   if (!isObj(raw)) fail(file, path)
   const kind = ensureString(file, `${path}.kind`, raw.kind)
@@ -241,6 +304,7 @@ export const SHOP_ITEMS: ShopItem[] = validateShop(rawShopJson)
 export const RELICS: RelicData[] = validateRelics(rawRelicsJson)
 export const MUTATIONS: Record<string, MutationDef> = validateMutations(rawMutationsJson)
 export const ACHIEVEMENTS: AchievementDef[] = validateAchievements(rawAchievementsJson)
+export const EQUIPMENTS: EquipmentDef[] = validateEquipments(rawEquipmentsJson)
 
 /** 玩家初始技能配置：按 id 从技能池取出（保持 SKILL_POOL 引用一致，便于运行时升级写回） */
 const PLAYER_START_IDS = ['normal_balanced', 'ultimate_balanced'] as const

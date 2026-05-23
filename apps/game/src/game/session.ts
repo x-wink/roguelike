@@ -5,10 +5,26 @@
 //   3. applyEventEffect：地图事件 / 商店购买等战斗外副作用
 //   4. createUnitFactory：注入给 UnitContainer，让其能产出 Player/Enemy 子类
 
-import { Buff, initBuffPool, Prop, type Unit, type UnitData, type UnitSnapshot } from '@xwink/rpg'
+import {
+  Buff,
+  initBuffPool,
+  Prop,
+  type EffectData,
+  type SkillData,
+  type Unit,
+  type UnitData,
+  type UnitSnapshot,
+} from '@xwink/rpg'
+import { EQUIPMENTS } from '@/data'
 import { Enemy, type EnemyData } from '@/game/units/enemy'
 import { Player, type PlayerData } from '@/game/units/player'
-import type { EventEffect, RelicData } from '@/game/meta/types'
+import type {
+  EquipmentInstance,
+  EquipPassive,
+  EquipSlot,
+  EventEffect,
+  RelicData,
+} from '@/game/meta/types'
 
 // ── Unit 工厂注入（UnitContainer.setFactory）─────────────────────────────────
 
@@ -41,7 +57,7 @@ export function createPlayerFromSnapshot(data: PlayerData, snap: UnitSnapshot): 
 
 // ── 数据提取 ──────────────────────────────────────────────────────────────────
 
-export function extractPlayerData(p: Player): PlayerData {
+export function extractPlayerData(p: Player, equipSkills: SkillData[] = []): PlayerData {
   return {
     id: p.id,
     name: p.name,
@@ -53,13 +69,82 @@ export function extractPlayerData(p: Player): PlayerData {
     agi: p.agi.value,
     int: p.int.value,
     lck: p.lck.value,
-    skills: p.pool.raw.map((s) => ({ ...s })),
+    skills: [...p.pool.raw.map((s) => ({ ...s })), ...equipSkills],
     damageFinalPct: p.damageFinalPct.value > 0 ? p.damageFinalPct.value : undefined,
     damageReduction: p.damageReduction.value > 0 ? p.damageReduction.value : undefined,
     growth: { level: p.growth.level, exp: p.growth.exp, unspentPoints: p.growth.unspentPoints },
     allocation: { ...p.allocation },
     backpack: p.backpack.serialize(),
   }
+}
+
+// ── 装备被动注入 ──────────────────────────────────────────────────────────────
+
+function _mergePassives(
+  slot: EquipSlot,
+  defId: string,
+  passives: EquipPassive[],
+): { effects?: EffectData[]; triggers?: SkillData['triggers'] } {
+  const allMods = passives.flatMap((p) => p.mods ?? [])
+  const allTriggers = passives.flatMap((p) => p.triggers ?? [])
+
+  const buffEffects: EffectData[] = allMods.map((mod) => ({
+    when: 'mount' as const,
+    behavior: { kind: 'propMod' as const, stat: mod.stat, mode: mod.mode, value: mod.value },
+  }))
+
+  const effects: EffectData[] | undefined =
+    buffEffects.length > 0
+      ? [
+          {
+            when: 'mount' as const,
+            target: 'self' as const,
+            behavior: {
+              kind: 'buff' as const,
+              data: {
+                // id 必须与装备实例稳定关联，replay/seed 重放才能复现
+                id: `_equip_buff_${slot}_${defId}`,
+                name: '',
+                duration: -1,
+                effects: buffEffects,
+              },
+            },
+          },
+        ]
+      : undefined
+
+  return {
+    effects,
+    triggers: allTriggers.length > 0 ? allTriggers : undefined,
+  }
+}
+
+/** 把当前装备实例转换为注入战斗引擎的虚拟被动 SkillData 列表 */
+export function buildEquipmentPassives(
+  equipSlots: Record<EquipSlot, EquipmentInstance | null>,
+): SkillData[] {
+  const result: SkillData[] = []
+  for (const [slotKey, inst] of Object.entries(equipSlots)) {
+    if (!inst) continue
+    const slot = slotKey as EquipSlot
+    const def = EQUIPMENTS.find((d) => d.id === inst.defId)
+    if (!def) continue
+    const passives: EquipPassive[] = [
+      def.passive,
+      ...inst.affixIds.map((id) => def.affixPool.find((a) => a.id === id)?.passive ?? {}),
+    ]
+    const { effects, triggers } = _mergePassives(slot, def.id, passives)
+    result.push({
+      id: `equip_${def.id}`,
+      name: def.name,
+      tags: [],
+      multiplier: 0,
+      role: 'passive',
+      effects,
+      triggers,
+    })
+  }
+  return result
 }
 
 export function extractEnemyData(e: Enemy): EnemyData {

@@ -45,6 +45,42 @@
           </div>
         </button>
       </div>
+
+      <!-- 装备词条洗练（修补者服务） -->
+      <div v-if="companionNpc && rerollableSlots.length > 0">
+        <p class="text-[0.68rem] text-[#666] font-mono tracking-widest mb-2 px-1">
+          {{ companionNpc.name }} · 词条洗练
+        </p>
+        <div
+          v-for="{ slot, inst, def } in rerollableSlots"
+          :key="slot"
+          class="mb-2 px-4 py-3.5 rounded-xl border border-[#4a4540] bg-[#363630]"
+        >
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-[#e0ddd8]">{{ def.name }}</span>
+            <span class="text-[0.62rem] font-mono text-[#888]">{{ SLOT_LABEL[slot] }}</span>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <button
+              v-for="(affixId, idx) in inst.affixIds"
+              :key="idx"
+              class="flex items-center justify-between px-3 py-2 rounded-lg border text-left transition-all"
+              :class="
+                canAffordReroll(inst)
+                  ? 'border-[#5a5040] bg-[#2e2a20] hover:border-[#8a7050] cursor-pointer'
+                  : 'border-[#3a3530] bg-[#252220] opacity-50 cursor-not-allowed'
+              "
+              :disabled="!canAffordReroll(inst)"
+              @click="canAffordReroll(inst) && onReroll(slot, idx)"
+            >
+              <span class="text-[0.72rem] text-[#c8b99a]">{{ affixName(def, affixId) }}</span>
+              <span class="text-[0.68rem] font-mono text-[#c8a840] shrink-0 ml-2">
+                ◈ {{ rerollPrice(inst.rerollCount) }}
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <PlayerStatusBar />
@@ -54,13 +90,17 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useGameStore } from '@/store/game'
+import { useMetaStore, rerollPrice } from '@/store/meta'
 import { useT } from '@/i18n'
 import PlayerStatusBar from '@/ui/components/PlayerStatusBar.vue'
 import { NPC_DEFS } from '@/game/meta'
+import { EQUIPMENTS } from '@/data'
+import type { EquipmentDef, EquipmentInstance, EquipSlot } from '@/game/meta'
 import type { MultiplierDef } from '@xwink/rpg'
 
 const t = useT()
 const game = useGameStore()
+const meta = useMetaStore()
 const npc = computed(() => {
   const id = game.currentNode?.npcId
   return id ? NPC_DEFS[id] : null
@@ -75,5 +115,38 @@ const upgradableSkills = computed(() =>
 
 function multVal(m: number | MultiplierDef): number {
   return typeof m === 'number' ? m : m.max
+}
+
+const SLOT_LABEL: Record<EquipSlot, string> = {
+  weapon: '武器',
+  armor: '护甲',
+  accessory: '饰品',
+}
+
+type RerollSlot = { slot: EquipSlot; inst: EquipmentInstance; def: EquipmentDef }
+
+const rerollableSlots = computed<RerollSlot[]>(() => {
+  const slots: EquipSlot[] = ['weapon', 'armor', 'accessory']
+  const out: RerollSlot[] = []
+  for (const slot of slots) {
+    const inst = meta.equipment[slot]
+    if (!inst || inst.affixIds.length === 0) continue
+    const def = EQUIPMENTS.find((d) => d.id === inst.defId)
+    if (!def) continue
+    out.push({ slot, inst, def })
+  }
+  return out
+})
+
+function canAffordReroll(inst: EquipmentInstance): boolean {
+  return game.player.backpack.gold >= rerollPrice(inst.rerollCount)
+}
+
+function affixName(def: EquipmentDef, affixId: string): string {
+  return def.affixPool.find((a) => a.id === affixId)?.name ?? affixId
+}
+
+function onReroll(slot: EquipSlot, idx: number) {
+  meta.rerollAffix(slot, idx, (price) => game.player.backpack.spendGold(price), game.srand)
 }
 </script>

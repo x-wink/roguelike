@@ -9,4 +9,5 @@ export {
   RELICS,
   MUTATIONS,
   ACHIEVEMENTS,
+  EQUIPMENTS,
 } from './loader'

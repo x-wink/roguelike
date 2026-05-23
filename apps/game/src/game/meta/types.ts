@@ -1,7 +1,7 @@
 // game/meta/types — Roguelike 跑图元数据类型。
 // 定义本游戏特有的状态机、节点类型、事件 / 商店效果，rpg 通用层不感知。
 
-import type { BuffData } from '@xwink/rpg'
+import type { BuffData, BuffStat, EffectData, ModMode, SkillTriggerEvent } from '@xwink/rpg'
 
 /** battle=普通战斗 / elite=精英 / boss=关卡终点 / rest=回复 / event=随机文本选择 / shop=消耗资源购买 */
 export type NodeType = 'battle' | 'elite' | 'boss' | 'rest' | 'event' | 'shop'
@@ -125,4 +125,42 @@ export type MutationDef = {
   /** 本次战斗胜利金币倍率（1.0 = 无加成） */
   goldMultiplier: number
   buff: BuffData
+}
+
+// ── 装备系统 ──────────────────────────────────────────────────────────────────
+
+export type EquipSlot = 'weapon' | 'armor' | 'accessory'
+export type EquipRarity = 'common' | 'rare' | 'epic'
+
+/** 装备属性修正（propMod shorthand，运行时转为永久 buff） */
+export type EquipMod = { stat: BuffStat; mode: ModMode; value: number }
+
+/** 装备触发效果（复用 SkillTrigger 结构） */
+export type EquipTrigger = { on: SkillTriggerEvent; chance?: number; effects: EffectData[] }
+
+/** 装备被动：属性修正 + 触发效果 */
+export type EquipPassive = { mods?: EquipMod[]; triggers?: EquipTrigger[] }
+
+export type EquipAffix = { id: string; name: string; passive: EquipPassive }
+
+export type EquipmentDef = {
+  id: string
+  name: string
+  description: string
+  lore: string
+  slot: EquipSlot
+  rarity: EquipRarity
+  price: number
+  passive: EquipPassive
+  /** 词条槽位数（1 或 2），购买时随机初始化 */
+  affixCount: 1 | 2
+  affixPool: EquipAffix[]
+}
+
+/** 装备实例（存在 meta store，跨局全局持有） */
+export type EquipmentInstance = {
+  defId: string
+  affixIds: string[]
+  /** 洗练次数，驱动指数价格：30 × 2^rerollCount */
+  rerollCount: number
 }

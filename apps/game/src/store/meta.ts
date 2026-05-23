@@ -1,18 +1,41 @@
-import { ACHIEVEMENTS } from '@/data'
+import { ACHIEVEMENTS, EQUIPMENTS } from '@/data'
 import { checkCondition, type AchievementDef, type AchievementStats } from '@/data/achievements'
+import type { EquipmentInstance, EquipSlot } from '@/game/meta'
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
 
 const META_KEY = 'crucible:meta'
 
+type EquipSlots = Record<EquipSlot, EquipmentInstance | null>
+
 type MetaSnap = {
-  v: 4
+  v: 5
   unlockedSkillIds: string[]
   rareCurrency: number
   completedAchievementIds: string[]
   stats: AchievementStats
   discoveredRelicIds: string[]
   shownApexStage: number
+  equipment: EquipSlots
+}
+
+function emptySlots(): EquipSlots {
+  return { weapon: null, armor: null, accessory: null }
+}
+
+/** 校验存档里的单个槽位 shape，不合法整槽丢弃。 */
+function _coerceInstance(raw: unknown): EquipmentInstance | null {
+  if (!raw || typeof raw !== 'object') return null
+  const r = raw as Record<string, unknown>
+  if (typeof r.defId !== 'string') return null
+  if (!Array.isArray(r.affixIds) || r.affixIds.some((x) => typeof x !== 'string')) return null
+  if (typeof r.rerollCount !== 'number' || r.rerollCount < 0) return null
+  return { defId: r.defId, affixIds: [...(r.affixIds as string[])], rerollCount: r.rerollCount }
+}
+
+/** 洗练价格：30 × 2^rerollCount */
+export function rerollPrice(rerollCount: number): number {
+  return 30 * Math.pow(2, rerollCount)
 }
 
 /** 初始就可用的技能——无需解锁 */
@@ -50,6 +73,7 @@ export const useMetaStore = defineStore('meta', () => {
   const stats = ref<AchievementStats>(defaultStats())
   const _discoveredRelicIds = ref<Set<string>>(new Set())
   const shownApexStage = ref(-1) // -1 = 从未看过任何阶段
+  const equipment = ref<EquipSlots>(emptySlots())
 
   // 待显示的成就通知队列（瞬态，不持久化）
   const pendingAchievements = ref<AchievementDef[]>([])
@@ -60,7 +84,7 @@ export const useMetaStore = defineStore('meta', () => {
       if (!raw) return
       const snap = JSON.parse(raw) as Partial<MetaSnap>
       const v = snap.v as number
-      if (v < 1 || v > 4) return
+      if (v < 1 || v > 5) return
       if (Array.isArray(snap.unlockedSkillIds)) {
         _unlockedIds.value = new Set(snap.unlockedSkillIds)
       }
@@ -79,19 +103,28 @@ export const useMetaStore = defineStore('meta', () => {
       if (typeof snap.shownApexStage === 'number') {
         shownApexStage.value = snap.shownApexStage
       }
+      if (snap.equipment && typeof snap.equipment === 'object') {
+        const e = snap.equipment as Record<string, unknown>
+        equipment.value = {
+          weapon: _coerceInstance(e.weapon),
+          armor: _coerceInstance(e.armor),
+          accessory: _coerceInstance(e.accessory),
+        }
+      }
     } catch {}
   }
 
   function _save() {
     try {
       const snap: MetaSnap = {
-        v: 4,
+        v: 5,
         unlockedSkillIds: [..._unlockedIds.value],
         rareCurrency: rareCurrency.value,
         completedAchievementIds: [..._completedIds.value],
         stats: { ...stats.value },
         discoveredRelicIds: [..._discoveredRelicIds.value],
         shownApexStage: shownApexStage.value,
+        equipment: equipment.value,
       }
       localStorage.setItem(META_KEY, JSON.stringify(snap))
     } catch {}
@@ -99,7 +132,15 @@ export const useMetaStore = defineStore('meta', () => {
 
   _load()
   watch(
-    [_unlockedIds, rareCurrency, _completedIds, stats, _discoveredRelicIds, shownApexStage],
+    [
+      _unlockedIds,
+      rareCurrency,
+      _completedIds,
+      stats,
+      _discoveredRelicIds,
+      shownApexStage,
+      equipment,
+    ],
     _save,
     { deep: true },
   )
@@ -159,6 +200,66 @@ export const useMetaStore = defineStore('meta', () => {
 
   function shiftPendingAchievement(): AchievementDef | undefined {
     return pendingAchievements.value.shift()
+  }
+
+  // ── 装备系统 ─────────────────────────────────────────────────────────────────
+
+  function getEquipped(slot: EquipSlot): EquipmentInstance | null {
+    return equipment.value[slot]
+  }
+
+  /** 购买装备：随机初始化词条，装入指定槽位（替换旧装备） */
+  function buyEquipment(defId: string, rng: () => number): void {
+    const def = EQUIPMENTS.find((d) => d.id === defId)
+    if (!def) return
+    const pool = def.affixPool
+    const affixIds: string[] = []
+    const available = pool.map((a) => a.id)
+    for (let i = 0; i < def.affixCount && available.length > 0; i++) {
+      const idx = Math.floor(rng() * available.length)
+      affixIds.push(available[idx])
+      available.splice(idx, 1)
+    }
+    equipment.value = {
+      ...equipment.value,
+      [def.slot]: { defId, affixIds, rerollCount: 0 },
+    }
+  }
+
+  /**
+   * 洗练指定槽位装备的第 affixIndex 个词条。
+   * spend 回调用于扣金，扣失败则 reroll 不执行（原子）。
+   * 返回 false 表示槽位无装备或扣金失败。
+   */
+  function rerollAffix(
+    slot: EquipSlot,
+    affixIndex: number,
+    spend: (price: number) => boolean,
+    rng: () => number,
+  ): boolean {
+    const inst = equipment.value[slot]
+    if (!inst) return false
+    const def = EQUIPMENTS.find((d) => d.id === inst.defId)
+    if (!def) return false
+    const currentId = inst.affixIds[affixIndex]
+    const candidates = def.affixPool.map((a) => a.id).filter((id) => id !== currentId)
+    if (candidates.length === 0) return false
+
+    const price = rerollPrice(inst.rerollCount)
+    if (!spend(price)) return false
+
+    const newId = candidates[Math.floor(rng() * candidates.length)]
+    const newAffixIds = [...inst.affixIds]
+    newAffixIds[affixIndex] = newId
+    equipment.value = {
+      ...equipment.value,
+      [slot]: { ...inst, affixIds: newAffixIds, rerollCount: inst.rerollCount + 1 },
+    }
+    return true
+  }
+
+  function unequip(slot: EquipSlot): void {
+    equipment.value = { ...equipment.value, [slot]: null }
   }
 
   // ── 遗物图鉴 ─────────────────────────────────────────────────────────────────
@@ -223,5 +324,10 @@ export const useMetaStore = defineStore('meta', () => {
     markApexStageShown,
     resetApexStage,
     shownApexStage,
+    equipment,
+    getEquipped,
+    buyEquipment,
+    rerollAffix,
+    unequip,
   }
 })

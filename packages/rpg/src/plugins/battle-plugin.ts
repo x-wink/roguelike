@@ -342,7 +342,8 @@ export class BattleContainer {
     const battleState = this._battleStateView()
     const s = resolveSkill(skill)
     const effects = s.effects ?? []
-    const triggers = s.triggers ?? []
+    const passiveTriggers = actor.pool.resolvedPassives.flatMap((p) => p.triggers ?? [])
+    const triggers = [...(s.triggers ?? []), ...passiveTriggers]
 
     const energyBefore = actor.getStat('energy')
 

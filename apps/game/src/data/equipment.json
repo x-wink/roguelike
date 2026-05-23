@@ -1,0 +1,546 @@
+[
+  {
+    "id": "worn_blade",
+    "name": "残刃",
+    "description": "力量 +15%",
+    "lore": "能用就不扔。别问为什么。",
+    "slot": "weapon",
+    "rarity": "common",
+    "price": 160,
+    "passive": { "mods": [{ "stat": "str", "mode": "basePercent", "value": 15 }] },
+    "affixCount": 1,
+    "affixPool": [
+      {
+        "id": "aff_w_str",
+        "name": "力势",
+        "passive": { "mods": [{ "stat": "str", "mode": "basePercent", "value": 10 }] }
+      },
+      {
+        "id": "aff_w_atk",
+        "name": "攻势",
+        "passive": { "mods": [{ "stat": "atk", "mode": "basePercent", "value": 12 }] }
+      },
+      {
+        "id": "aff_w_crit",
+        "name": "破点",
+        "passive": { "mods": [{ "stat": "crit", "mode": "baseFlat", "value": 8 }] }
+      },
+      {
+        "id": "aff_w_combo",
+        "name": "连势",
+        "passive": { "mods": [{ "stat": "combo", "mode": "baseFlat", "value": 8 }] }
+      },
+      {
+        "id": "aff_w_kill_heal",
+        "name": "杀生",
+        "passive": {
+          "triggers": [
+            {
+              "on": "onKill",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": { "kind": "heal", "stat": "health", "value": 15 }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "bone_fang",
+    "name": "骨牙",
+    "description": "力量 +20%，暴击 +12",
+    "lore": "不知道是谁的。够用就行。",
+    "slot": "weapon",
+    "rarity": "rare",
+    "price": 320,
+    "passive": {
+      "mods": [
+        { "stat": "str", "mode": "basePercent", "value": 20 },
+        { "stat": "crit", "mode": "baseFlat", "value": 12 }
+      ]
+    },
+    "affixCount": 1,
+    "affixPool": [
+      {
+        "id": "aff_w_str2",
+        "name": "力势·深",
+        "passive": { "mods": [{ "stat": "str", "mode": "basePercent", "value": 12 }] }
+      },
+      {
+        "id": "aff_w_critdmg",
+        "name": "爆伤",
+        "passive": { "mods": [{ "stat": "critDmg", "mode": "baseFlat", "value": 30 }] }
+      },
+      {
+        "id": "aff_w_armorpen",
+        "name": "穿甲",
+        "passive": { "mods": [{ "stat": "armorPen", "mode": "baseFlat", "value": 18 }] }
+      },
+      {
+        "id": "aff_w_combo2",
+        "name": "连势·深",
+        "passive": { "mods": [{ "stat": "combo", "mode": "baseFlat", "value": 12 }] }
+      },
+      {
+        "id": "aff_w_crit_energy",
+        "name": "暴能",
+        "passive": {
+          "triggers": [
+            {
+              "on": "onCrit",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": { "kind": "heal", "stat": "energy", "value": 12 }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "aff_w_kill_heal2",
+        "name": "杀生·深",
+        "passive": {
+          "triggers": [
+            {
+              "on": "onKill",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": { "kind": "heal", "stat": "health", "value": 20 }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "ember_edge",
+    "name": "烬锋",
+    "description": "力量 +25%，最终伤害 +10%",
+    "lore": "火烧完了才打出来的。比任何东西都硬。",
+    "slot": "weapon",
+    "rarity": "epic",
+    "price": 560,
+    "passive": {
+      "mods": [
+        { "stat": "str", "mode": "basePercent", "value": 25 },
+        { "stat": "damageFinalPct", "mode": "baseFlat", "value": 10 }
+      ]
+    },
+    "affixCount": 2,
+    "affixPool": [
+      {
+        "id": "aff_w_str3",
+        "name": "力势·极",
+        "passive": { "mods": [{ "stat": "str", "mode": "basePercent", "value": 15 }] }
+      },
+      {
+        "id": "aff_w_atk2",
+        "name": "攻势·深",
+        "passive": { "mods": [{ "stat": "atk", "mode": "basePercent", "value": 18 }] }
+      },
+      {
+        "id": "aff_w_crit2",
+        "name": "破点·深",
+        "passive": { "mods": [{ "stat": "crit", "mode": "baseFlat", "value": 15 }] }
+      },
+      {
+        "id": "aff_w_critdmg2",
+        "name": "爆伤·深",
+        "passive": { "mods": [{ "stat": "critDmg", "mode": "baseFlat", "value": 40 }] }
+      },
+      {
+        "id": "aff_w_armorpen2",
+        "name": "穿甲·深",
+        "passive": { "mods": [{ "stat": "armorPen", "mode": "baseFlat", "value": 25 }] }
+      },
+      {
+        "id": "aff_w_combo3",
+        "name": "连势·极",
+        "passive": { "mods": [{ "stat": "combo", "mode": "baseFlat", "value": 15 }] }
+      },
+      {
+        "id": "aff_w_kill_heal3",
+        "name": "杀生·极",
+        "passive": {
+          "triggers": [
+            {
+              "on": "onKill",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": { "kind": "heal", "stat": "health", "value": 25 }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "aff_w_crit_energy2",
+        "name": "暴能·深",
+        "passive": {
+          "triggers": [
+            {
+              "on": "onCrit",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": { "kind": "heal", "stat": "energy", "value": 15 }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "charred_coat",
+    "name": "焦衣",
+    "description": "防御 +20%",
+    "lore": "烧剩的东西，比新的更硬。",
+    "slot": "armor",
+    "rarity": "common",
+    "price": 160,
+    "passive": { "mods": [{ "stat": "def", "mode": "basePercent", "value": 20 }] },
+    "affixCount": 1,
+    "affixPool": [
+      {
+        "id": "aff_a_def",
+        "name": "护势",
+        "passive": { "mods": [{ "stat": "def", "mode": "basePercent", "value": 12 }] }
+      },
+      {
+        "id": "aff_a_con",
+        "name": "体势",
+        "passive": { "mods": [{ "stat": "con", "mode": "basePercent", "value": 12 }] }
+      },
+      {
+        "id": "aff_a_spd",
+        "name": "疾势",
+        "passive": { "mods": [{ "stat": "spd", "mode": "basePercent", "value": 8 }] }
+      },
+      {
+        "id": "aff_a_counter",
+        "name": "反势",
+        "passive": { "mods": [{ "stat": "counter", "mode": "baseFlat", "value": 15 }] }
+      },
+      {
+        "id": "aff_a_dodge",
+        "name": "闪势",
+        "passive": { "mods": [{ "stat": "dodge", "mode": "baseFlat", "value": 10 }] }
+      }
+    ]
+  },
+  {
+    "id": "ash_plate",
+    "name": "灰甲",
+    "description": "防御 +25%，体质 +12%",
+    "lore": "磨了多少次，已经记不清了。",
+    "slot": "armor",
+    "rarity": "rare",
+    "price": 320,
+    "passive": {
+      "mods": [
+        { "stat": "def", "mode": "basePercent", "value": 25 },
+        { "stat": "con", "mode": "basePercent", "value": 12 }
+      ]
+    },
+    "affixCount": 1,
+    "affixPool": [
+      {
+        "id": "aff_a_def2",
+        "name": "护势·深",
+        "passive": { "mods": [{ "stat": "def", "mode": "basePercent", "value": 15 }] }
+      },
+      {
+        "id": "aff_a_con2",
+        "name": "体势·深",
+        "passive": { "mods": [{ "stat": "con", "mode": "basePercent", "value": 15 }] }
+      },
+      {
+        "id": "aff_a_dmgred",
+        "name": "减伤",
+        "passive": { "mods": [{ "stat": "damageReduction", "mode": "baseFlat", "value": 5 }] }
+      },
+      {
+        "id": "aff_a_counter2",
+        "name": "反势·深",
+        "passive": { "mods": [{ "stat": "counter", "mode": "baseFlat", "value": 20 }] }
+      },
+      {
+        "id": "aff_a_dodge2",
+        "name": "闪势·深",
+        "passive": { "mods": [{ "stat": "dodge", "mode": "baseFlat", "value": 12 }] }
+      },
+      {
+        "id": "aff_a_spd2",
+        "name": "疾势·深",
+        "passive": { "mods": [{ "stat": "spd", "mode": "basePercent", "value": 10 }] }
+      }
+    ]
+  },
+  {
+    "id": "void_shell",
+    "name": "渊壳",
+    "description": "防御 +30%，减伤 +10%",
+    "lore": "渊壁的碎片锻进去的。重量是应得的。",
+    "slot": "armor",
+    "rarity": "epic",
+    "price": 560,
+    "passive": {
+      "mods": [
+        { "stat": "def", "mode": "basePercent", "value": 30 },
+        { "stat": "damageReduction", "mode": "baseFlat", "value": 10 }
+      ]
+    },
+    "affixCount": 2,
+    "affixPool": [
+      {
+        "id": "aff_a_def3",
+        "name": "护势·极",
+        "passive": { "mods": [{ "stat": "def", "mode": "basePercent", "value": 18 }] }
+      },
+      {
+        "id": "aff_a_con3",
+        "name": "体势·极",
+        "passive": { "mods": [{ "stat": "con", "mode": "basePercent", "value": 18 }] }
+      },
+      {
+        "id": "aff_a_dmgred2",
+        "name": "减伤·深",
+        "passive": { "mods": [{ "stat": "damageReduction", "mode": "baseFlat", "value": 8 }] }
+      },
+      {
+        "id": "aff_a_counter3",
+        "name": "反势·极",
+        "passive": { "mods": [{ "stat": "counter", "mode": "baseFlat", "value": 25 }] }
+      },
+      {
+        "id": "aff_a_dodge3",
+        "name": "闪势·极",
+        "passive": { "mods": [{ "stat": "dodge", "mode": "baseFlat", "value": 15 }] }
+      },
+      {
+        "id": "aff_a_spd3",
+        "name": "疾势·极",
+        "passive": { "mods": [{ "stat": "spd", "mode": "basePercent", "value": 12 }] }
+      },
+      {
+        "id": "aff_a_kill_shield",
+        "name": "杀生护",
+        "passive": {
+          "triggers": [
+            {
+              "on": "onKill",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": { "kind": "stat", "prop": "shield", "amount": 20 }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "severed_cord",
+    "name": "断绳",
+    "description": "敏捷 +15%",
+    "lore": "不知道用来绑什么的。现在绑自己。",
+    "slot": "accessory",
+    "rarity": "common",
+    "price": 160,
+    "passive": { "mods": [{ "stat": "agi", "mode": "basePercent", "value": 15 }] },
+    "affixCount": 1,
+    "affixPool": [
+      {
+        "id": "aff_c_agi",
+        "name": "轻势",
+        "passive": { "mods": [{ "stat": "agi", "mode": "basePercent", "value": 10 }] }
+      },
+      {
+        "id": "aff_c_spd",
+        "name": "疾势",
+        "passive": { "mods": [{ "stat": "spd", "mode": "basePercent", "value": 10 }] }
+      },
+      {
+        "id": "aff_c_lck",
+        "name": "运势",
+        "passive": { "mods": [{ "stat": "lck", "mode": "baseFlat", "value": 1 }] }
+      },
+      {
+        "id": "aff_c_hit",
+        "name": "准势",
+        "passive": { "mods": [{ "stat": "hit", "mode": "baseFlat", "value": 12 }] }
+      },
+      {
+        "id": "aff_c_dodge",
+        "name": "闪势",
+        "passive": { "mods": [{ "stat": "dodge", "mode": "baseFlat", "value": 10 }] }
+      }
+    ]
+  },
+  {
+    "id": "void_token",
+    "name": "渊牌",
+    "description": "敏捷 +10%，幸运 +2",
+    "lore": "赌注的筹码。赢了的那个人不要了。",
+    "slot": "accessory",
+    "rarity": "rare",
+    "price": 320,
+    "passive": {
+      "mods": [
+        { "stat": "agi", "mode": "basePercent", "value": 10 },
+        { "stat": "lck", "mode": "baseFlat", "value": 2 }
+      ]
+    },
+    "affixCount": 1,
+    "affixPool": [
+      {
+        "id": "aff_c_agi2",
+        "name": "轻势·深",
+        "passive": { "mods": [{ "stat": "agi", "mode": "basePercent", "value": 12 }] }
+      },
+      {
+        "id": "aff_c_spd2",
+        "name": "疾势·深",
+        "passive": { "mods": [{ "stat": "spd", "mode": "basePercent", "value": 12 }] }
+      },
+      {
+        "id": "aff_c_lck2",
+        "name": "运势·深",
+        "passive": { "mods": [{ "stat": "lck", "mode": "baseFlat", "value": 2 }] }
+      },
+      {
+        "id": "aff_c_combo",
+        "name": "连势",
+        "passive": { "mods": [{ "stat": "combo", "mode": "baseFlat", "value": 10 }] }
+      },
+      {
+        "id": "aff_c_hit2",
+        "name": "准势·深",
+        "passive": { "mods": [{ "stat": "hit", "mode": "baseFlat", "value": 15 }] }
+      },
+      {
+        "id": "aff_c_crit_heal",
+        "name": "暴愈",
+        "passive": {
+          "triggers": [
+            {
+              "on": "onCrit",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": { "kind": "heal", "stat": "health", "value": 10 }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "hollow_core",
+    "name": "空核",
+    "description": "速度 +20%，连击 +12",
+    "lore": "中间那部分最难找。找到了也不知道该拿它怎么办。",
+    "slot": "accessory",
+    "rarity": "epic",
+    "price": 560,
+    "passive": {
+      "mods": [
+        { "stat": "spd", "mode": "basePercent", "value": 20 },
+        { "stat": "combo", "mode": "baseFlat", "value": 12 }
+      ]
+    },
+    "affixCount": 2,
+    "affixPool": [
+      {
+        "id": "aff_c_agi3",
+        "name": "轻势·极",
+        "passive": { "mods": [{ "stat": "agi", "mode": "basePercent", "value": 15 }] }
+      },
+      {
+        "id": "aff_c_spd3",
+        "name": "疾势·极",
+        "passive": { "mods": [{ "stat": "spd", "mode": "basePercent", "value": 15 }] }
+      },
+      {
+        "id": "aff_c_lck3",
+        "name": "运势·极",
+        "passive": { "mods": [{ "stat": "lck", "mode": "baseFlat", "value": 3 }] }
+      },
+      {
+        "id": "aff_c_combo2",
+        "name": "连势·深",
+        "passive": { "mods": [{ "stat": "combo", "mode": "baseFlat", "value": 15 }] }
+      },
+      {
+        "id": "aff_c_hit3",
+        "name": "准势·极",
+        "passive": { "mods": [{ "stat": "hit", "mode": "baseFlat", "value": 20 }] }
+      },
+      {
+        "id": "aff_c_dodge2",
+        "name": "闪势·深",
+        "passive": { "mods": [{ "stat": "dodge", "mode": "baseFlat", "value": 15 }] }
+      },
+      {
+        "id": "aff_c_crit_heal2",
+        "name": "暴愈·深",
+        "passive": {
+          "triggers": [
+            {
+              "on": "onCrit",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": { "kind": "heal", "stat": "health", "value": 15 }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "aff_c_kill_energy",
+        "name": "杀生能",
+        "passive": {
+          "triggers": [
+            {
+              "on": "onKill",
+              "effects": [
+                {
+                  "when": "mount",
+                  "target": "self",
+                  "behavior": { "kind": "heal", "stat": "energy", "value": 20 }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

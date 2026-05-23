@@ -1,6 +1,7 @@
 import {
   applyEventEffect,
   applyRelicToPlayer,
+  buildEquipmentPassives,
   createPlayerFromSnapshot,
   extractEnemyData,
   extractPlayerData,
@@ -459,8 +460,9 @@ export const useGameStore = defineStore('game', () => {
 
       const p = player.value
       p.energy.value = 0
-      const playerData = extractPlayerData(p)
-      const playerSnap = p.snapshot()
+      const equipSkills = buildEquipmentPassives(useMetaStore().equipment)
+      const playerData = extractPlayerData(p, equipSkills)
+      const playerSnap = { ...p.snapshot(), skills: playerData.skills.map((s) => ({ ...s })) }
       const battle = createBattleSandbox(playerData, playerSnap, ENEMIES[node.enemyId!])
 
       if (node.appliedMutations?.length) {
@@ -788,8 +790,12 @@ export const useGameStore = defineStore('game', () => {
     _savedPlayer = player.value
 
     arenaPlayer.energy.value = 0
-    const playerData = extractPlayerData(arenaPlayer)
-    const playerSnap = arenaPlayer.snapshot()
+    const equipSkills = buildEquipmentPassives(useMetaStore().equipment)
+    const playerData = extractPlayerData(arenaPlayer, equipSkills)
+    const playerSnap = {
+      ...arenaPlayer.snapshot(),
+      skills: playerData.skills.map((s) => ({ ...s })),
+    }
     const enemyData = extractEnemyData(arenaEnemy)
     const battle = createBattleSandbox(playerData, playerSnap, enemyData)
     _battle.value = battle
@@ -875,5 +881,6 @@ export const useGameStore = defineStore('game', () => {
     prologueStage,
     runCount,
     clearedZones,
+    srand,
   }
 })
