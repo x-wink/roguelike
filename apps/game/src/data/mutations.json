@@ -429,5 +429,208 @@
         }
       ]
     }
+  },
+  {
+    "id": "mut_brutal",
+    "name": "残暴",
+    "description": "敌人连击率 +25、攻击 +20%，战斗奖励金币 ×1.55",
+    "goldMultiplier": 1.55,
+    "buff": {
+      "id": "mut_brutal",
+      "name": "残暴",
+      "duration": -1,
+      "tags": ["mutation"],
+      "effects": [
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "combo", "mode": "baseFlat", "value": 25 }
+        },
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "atk", "mode": "basePercent", "value": 0.2 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mut_insight",
+    "name": "洞察",
+    "description": "敌人命中率 +25、破甲 +25，难以回避，战斗奖励金币 ×1.5",
+    "goldMultiplier": 1.5,
+    "buff": {
+      "id": "mut_insight",
+      "name": "洞察",
+      "duration": -1,
+      "tags": ["mutation"],
+      "effects": [
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "hit", "mode": "baseFlat", "value": 25 }
+        },
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "armorPen", "mode": "baseFlat", "value": 25 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mut_heavy",
+    "name": "重甲",
+    "description": "敌人防御 +50%、体质 +30%，战斗奖励金币 ×1.45",
+    "goldMultiplier": 1.45,
+    "buff": {
+      "id": "mut_heavy",
+      "name": "重甲",
+      "duration": -1,
+      "tags": ["mutation"],
+      "effects": [
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "def", "mode": "basePercent", "value": 0.5 }
+        },
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "con", "mode": "basePercent", "value": 0.3 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mut_shadow",
+    "name": "影步",
+    "description": "敌人回避 +25、速度 +30%，战斗奖励金币 ×1.4",
+    "goldMultiplier": 1.4,
+    "buff": {
+      "id": "mut_shadow",
+      "name": "影步",
+      "duration": -1,
+      "tags": ["mutation"],
+      "effects": [
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "dodge", "mode": "baseFlat", "value": 25 }
+        },
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "spd", "mode": "basePercent", "value": 0.3 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mut_zealot",
+    "name": "狂信",
+    "description": "敌人力量 +40%、最终伤害 +15%，攻势极度压迫，战斗奖励金币 ×1.8",
+    "goldMultiplier": 1.8,
+    "buff": {
+      "id": "mut_zealot",
+      "name": "狂信",
+      "duration": -1,
+      "tags": ["mutation"],
+      "effects": [
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "str", "mode": "basePercent", "value": 0.4 }
+        },
+        {
+          "when": "mount",
+          "behavior": {
+            "kind": "propMod",
+            "stat": "damageFinalPct",
+            "mode": "baseFlat",
+            "value": 0.15
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mut_erosion",
+    "name": "侵蚀",
+    "description": "敌人减伤 +10%、最终伤害 +20%，攻守难分，战斗奖励金币 ×1.7",
+    "goldMultiplier": 1.7,
+    "buff": {
+      "id": "mut_erosion",
+      "name": "侵蚀",
+      "duration": -1,
+      "tags": ["mutation"],
+      "effects": [
+        {
+          "when": "mount",
+          "behavior": {
+            "kind": "propMod",
+            "stat": "damageReduction",
+            "mode": "baseFlat",
+            "value": 0.1
+          }
+        },
+        {
+          "when": "mount",
+          "behavior": {
+            "kind": "propMod",
+            "stat": "damageFinalPct",
+            "mode": "baseFlat",
+            "value": 0.2
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mut_abyss_devour",
+    "name": "渊噬",
+    "description": "力量、体质、敏捷、速度各 +20%，渊的形状，战斗奖励金币 ×2.0",
+    "goldMultiplier": 2.0,
+    "buff": {
+      "id": "mut_abyss_devour",
+      "name": "渊噬",
+      "duration": -1,
+      "tags": ["mutation"],
+      "effects": [
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "str", "mode": "basePercent", "value": 0.2 }
+        },
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "con", "mode": "basePercent", "value": 0.2 }
+        },
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "agi", "mode": "basePercent", "value": 0.2 }
+        },
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "spd", "mode": "basePercent", "value": 0.2 }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mut_blood_rite",
+    "name": "血祭",
+    "description": "敌人暴击率 +20、暴击伤害 +40、攻击 +25%，战斗奖励金币 ×1.75",
+    "goldMultiplier": 1.75,
+    "buff": {
+      "id": "mut_blood_rite",
+      "name": "血祭",
+      "duration": -1,
+      "tags": ["mutation"],
+      "effects": [
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "crit", "mode": "baseFlat", "value": 20 }
+        },
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "critDmg", "mode": "baseFlat", "value": 40 }
+        },
+        {
+          "when": "mount",
+          "behavior": { "kind": "propMod", "stat": "atk", "mode": "basePercent", "value": 0.25 }
+        }
+      ]
+    }
   }
 ]
