@@ -465,7 +465,7 @@
           "data": {
             "id": "synergy_buff",
             "name": "协同",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff", "anonymous"],
             "effects": [
               {
@@ -496,7 +496,7 @@
                 "data": {
                   "id": "synergy_buff_2",
                   "name": "协同强化",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff", "anonymous"],
                   "effects": [
                     {
@@ -792,7 +792,7 @@
           "data": {
             "id": "crush_buff",
             "name": "碾压",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff"],
             "effects": [
               {
@@ -823,7 +823,7 @@
                 "data": {
                   "id": "crush_buff_2",
                   "name": "碾压强化",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff", "anonymous"],
                   "effects": [
                     {
@@ -1129,7 +1129,7 @@
           "data": {
             "id": "thorns_passive",
             "name": "荆棘",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff"],
             "effects": [
               {
@@ -1160,7 +1160,7 @@
                 "data": {
                   "id": "thorns_passive_2",
                   "name": "荆棘强化",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff", "anonymous"],
                   "effects": [
                     {
@@ -1521,7 +1521,7 @@
           "data": {
             "id": "lucky_buff",
             "name": "幸运",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff"],
             "effects": [
               {
@@ -1552,7 +1552,7 @@
                 "data": {
                   "id": "lucky_buff_2",
                   "name": "幸运强化",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff", "anonymous"],
                   "effects": [
                     {
@@ -1589,7 +1589,7 @@
           "data": {
             "id": "edge_buff",
             "name": "悬崖",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff"],
             "effects": [
               {
@@ -1620,7 +1620,7 @@
                 "data": {
                   "id": "edge_buff_2",
                   "name": "悬崖强化",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff", "anonymous"],
                   "effects": [
                     {
@@ -1720,7 +1720,7 @@
           "data": {
             "id": "gmb_burn_buff",
             "name": "引燃",
-            "duration": 999,
+            "duration": -1,
             "tags": ["anonymous"],
             "effects": [
               {
@@ -1761,7 +1761,7 @@
           "data": {
             "id": "gmb_anchor_buff",
             "name": "锚定",
-            "duration": 999,
+            "duration": -1,
             "tags": ["anonymous"],
             "effects": [
               {
@@ -1802,7 +1802,7 @@
           "data": {
             "id": "buff_atk",
             "name": "强化攻击",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff"],
             "effects": [
               {
@@ -1832,7 +1832,7 @@
                 "data": {
                   "id": "buff_atk",
                   "name": "强化攻击",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff"],
                   "effects": [
                     {
@@ -1869,7 +1869,7 @@
           "data": {
             "id": "buff_def",
             "name": "强化防御",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff"],
             "effects": [
               {
@@ -1899,7 +1899,7 @@
                 "data": {
                   "id": "buff_def",
                   "name": "强化防御",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff"],
                   "effects": [
                     {
@@ -1936,7 +1936,7 @@
           "data": {
             "id": "buff_spd",
             "name": "强化速度",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff"],
             "effects": [
               {
@@ -1966,7 +1966,7 @@
                 "data": {
                   "id": "buff_spd",
                   "name": "强化速度",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff"],
                   "effects": [
                     {
@@ -2003,7 +2003,7 @@
           "data": {
             "id": "passive_hp_buff",
             "name": "强健",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff"],
             "effects": [
               {
@@ -2033,7 +2033,7 @@
                 "data": {
                   "id": "passive_hp_buff_2",
                   "name": "强健强化",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff", "anonymous"],
                   "effects": [
                     {
@@ -2070,7 +2070,7 @@
           "data": {
             "id": "passive_crit_buff",
             "name": "锐利",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff"],
             "effects": [
               {
@@ -2100,7 +2100,7 @@
                 "data": {
                   "id": "passive_crit_buff_2",
                   "name": "锐利强化",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff", "anonymous"],
                   "effects": [
                     {
@@ -2137,7 +2137,7 @@
           "data": {
             "id": "passive_critdmg_buff",
             "name": "致命",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff"],
             "effects": [
               {
@@ -2167,7 +2167,7 @@
                 "data": {
                   "id": "passive_critdmg_buff_2",
                   "name": "致命强化",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff", "anonymous"],
                   "effects": [
                     {
@@ -2204,7 +2204,7 @@
           "data": {
             "id": "passive_dodge_buff",
             "name": "闪身",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff"],
             "effects": [
               {
@@ -2234,7 +2234,7 @@
                 "data": {
                   "id": "passive_dodge_buff_2",
                   "name": "闪身强化",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff", "anonymous"],
                   "effects": [
                     {
@@ -2271,7 +2271,7 @@
           "data": {
             "id": "passive_reduction_buff",
             "name": "韧性",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff"],
             "effects": [
               {
@@ -2301,7 +2301,7 @@
                 "data": {
                   "id": "passive_reduction_buff_2",
                   "name": "韧性强化",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff", "anonymous"],
                   "effects": [
                     {
@@ -2338,7 +2338,7 @@
           "data": {
             "id": "passive_armorpen_buff",
             "name": "破甲",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff"],
             "effects": [
               {
@@ -2368,7 +2368,7 @@
                 "data": {
                   "id": "passive_armorpen_buff_2",
                   "name": "破甲强化",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff", "anonymous"],
                   "effects": [
                     {
@@ -2405,7 +2405,7 @@
           "data": {
             "id": "passive_hit_buff",
             "name": "精准",
-            "duration": 999,
+            "duration": -1,
             "tags": ["buff"],
             "effects": [
               {
@@ -2435,7 +2435,7 @@
                 "data": {
                   "id": "passive_hit_buff_2",
                   "name": "精准强化",
-                  "duration": 999,
+                  "duration": -1,
                   "tags": ["buff", "anonymous"],
                   "effects": [
                     {

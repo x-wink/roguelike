@@ -624,7 +624,7 @@ export class BattleContainer {
     const pool = unit.buffs as BuffPool
     // tick duration（不通过 markExpired，因为 BuffPool.tickDuration 会做删除）
     // 这里改为：先 tick，再 mark；sweep 留给 sweepBuffs
-    for (const b of pool.all) b.duration--
+    for (const b of pool.all) b.tick()
     for (const b of pool.all) {
       if (b.expired) {
         // 走两阶段：先把 unmount effects + propMod 清除立刻处理（在 turn:end handler 内）

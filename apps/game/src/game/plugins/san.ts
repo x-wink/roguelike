@@ -86,7 +86,7 @@ function makeSanStateBuff(san: number, maxSan: number) {
   return {
     id: SAN_STATE_BUFF_ID,
     name: '意识状态',
-    duration: 999,
+    duration: -1,
     tags: ['anonymous' as const],
     effects: [
       BuffEffectFactory.prop({

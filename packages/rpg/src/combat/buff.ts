@@ -42,7 +42,7 @@ export class Buff {
     return this.tags.has('anonymous')
   }
   get expired(): boolean {
-    return this.duration <= 0
+    return this.duration === 0
   }
 
   /**
@@ -64,7 +64,7 @@ export class Buff {
   }
 
   tick(): void {
-    this.duration--
+    if (this.duration > 0) this.duration--
   }
 }
 
@@ -217,7 +217,7 @@ export class BuffPool {
    * - 同 id 已存在：叠加层数 / 刷新 duration，不重复触发 mount。
    */
   add(buf: Buff): { effects: EffectData[]; buf: Buff } | null {
-    if (buf.duration <= 0) {
+    if (buf.duration === 0) {
       return { effects: buf.collect('mount'), buf }
     }
     const existing = this._list.find((b) => b.id === buf.id)

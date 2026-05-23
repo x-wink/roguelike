@@ -60,7 +60,7 @@
         :class="
           buf.tags.has('debuff') ? 'bg-red-900/25 text-red-400' : 'bg-sky-900/25 text-sky-400'
         "
-        >{{ buf.name }} {{ buf.duration }}</span
+        >{{ buf.name }} {{ buf.duration < 0 ? '永' : buf.duration }}</span
       >
     </div>
   </div>

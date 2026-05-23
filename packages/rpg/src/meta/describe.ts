@@ -589,7 +589,7 @@ export function describeSkill(skill: SkillData): DescToken[] {
   for (const e of effects) {
     const b = e.behavior
     if (b.kind === 'buff') {
-      if (b.data.tags?.includes('anonymous') || b.data.duration >= 999) {
+      if (b.data.duration < 0) {
         for (const inner of b.data.effects) {
           if (inner.behavior.kind === 'propMod') tokens.push(tokenizeEffect(inner))
         }
@@ -660,7 +660,7 @@ export function renderCostToken(t: CostToken, level: TipLevel = 'info'): string 
 export function renderBuffDescToken(t: BuffDescToken, level: TipLevel = 'info'): string {
   const masked = isMasked(level)
   const targetLabel = t.target === 'self' ? '自身' : '目标'
-  const durationText = t.duration > 0 ? `${t.duration} 回合` : '立即'
+  const durationText = t.duration < 0 ? '永久' : t.duration > 0 ? `${t.duration} 回合` : '立即'
   if (masked) return `${targetLabel}：${t.name}（${durationText}）`
   const effectsText = t.effects.map((e) => renderEffectToken(e, level)).join('，') || '无效果'
   return `${targetLabel}：${t.name}（${durationText}，id: ${t.id}）— ${effectsText}`
@@ -708,9 +708,7 @@ export function describeUpgradeDelta(delta: SkillUpgradeDelta, level: TipLevel =
   for (const e of delta.addEffects ?? []) {
     const b = e.behavior
     if (b.kind === 'buff') {
-      if (!b.data.tags?.includes('anonymous')) {
-        lines.push(renderBuffDescToken(tokenizeBuffData(b.data, e.target ?? 'self'), level))
-      }
+      lines.push(renderBuffDescToken(tokenizeBuffData(b.data, e.target ?? 'self'), level))
     } else {
       lines.push(renderEffectToken(tokenizeEffect(e), level))
     }

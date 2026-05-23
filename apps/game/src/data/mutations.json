@@ -7,7 +7,7 @@
     "buff": {
       "id": "mut_berserk",
       "name": "狂暴",
-      "duration": 999,
+      "duration": -1,
       "tags": ["mutation"],
       "effects": [
         {
@@ -30,7 +30,7 @@
     "buff": {
       "id": "mut_tough",
       "name": "强韧",
-      "duration": 999,
+      "duration": -1,
       "tags": ["mutation"],
       "effects": [
         {
@@ -53,7 +53,7 @@
     "buff": {
       "id": "mut_swift",
       "name": "疾速",
-      "duration": 999,
+      "duration": -1,
       "tags": ["mutation"],
       "effects": [
         {

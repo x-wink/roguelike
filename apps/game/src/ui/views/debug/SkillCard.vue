@@ -52,7 +52,7 @@
         </div>
 
         <div
-          v-else-if="token.kind === 'buff' && !(skill.note && token.duration >= 999)"
+          v-else-if="token.kind === 'buff' && !(skill.note && token.duration < 0)"
           class="flex items-start gap-1.5"
         >
           <span
@@ -72,8 +72,8 @@
             :data-tips="buffDescTips(token)"
           >
             {{ token.name
-            }}<span v-if="token.duration > 0" class="text-gray-400 ml-1"
-              >{{ token.duration }} 回合</span
+            }}<span v-if="token.duration !== 0" class="text-gray-400 ml-1"
+              >{{ token.duration < 0 ? '永久' : `${token.duration} 回合` }}</span
             >
           </span>
         </div>
@@ -202,7 +202,7 @@
                     }}</span>
                   </div>
                   <div
-                    v-else-if="token.kind === 'buff' && !(skill.note && token.duration >= 999)"
+                    v-else-if="token.kind === 'buff' && !(skill.note && token.duration < 0)"
                     class="flex items-center gap-2"
                   >
                     <span
@@ -220,8 +220,8 @@
                       class="text-sm"
                       :class="isDebuffToken(token) ? 'text-red-500' : 'text-gray-700'"
                       >{{ token.name
-                      }}<span v-if="token.duration > 0" class="text-xs text-gray-400 ml-1"
-                        >{{ token.duration }} 回合</span
+                      }}<span v-if="token.duration !== 0" class="text-xs text-gray-400 ml-1"
+                        >{{ token.duration < 0 ? '永久' : `${token.duration} 回合` }}</span
                       ></span
                     >
                   </div>
@@ -401,7 +401,7 @@ function buffDescTips(token: BuffDescToken): string {
   const lines = token.effects.map((e: EffectDescToken) => renderEffectToken(e, level.value))
   return JSON.stringify({
     title: token.name,
-    subtitle: token.duration > 0 ? `持续 ${token.duration} 回合` : '立即触发',
+    subtitle: token.duration < 0 ? '永久' : token.duration > 0 ? `持续 ${token.duration} 回合` : '立即触发',
     content: lines.join('\n') || '无效果',
   })
 }

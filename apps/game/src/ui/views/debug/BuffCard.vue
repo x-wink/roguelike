@@ -35,7 +35,7 @@
 
     <!-- 底部信息 -->
     <div class="text-xs font-mono text-gray-400">
-      {{ buf.duration > 0 ? `${buf.duration} 回合` : '立即触发' }}
+      {{ buf.duration < 0 ? '永久' : buf.duration > 0 ? `${buf.duration} 回合` : '立即触发' }}
     </div>
   </div>
 </template>

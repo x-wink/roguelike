@@ -37,7 +37,7 @@
                     row.buff.name || row.buff.id
                   }}</span>
                   <span class="text-[0.55rem] font-mono text-gray-300 shrink-0">
-                    {{ row.buff.duration > 0 ? `${row.buff.duration}T` : 'inst' }}
+                    {{ row.buff.duration < 0 ? '∞' : row.buff.duration > 0 ? `${row.buff.duration}T` : 'inst' }}
                   </span>
                 </div>
               </div>
@@ -80,7 +80,7 @@
                     row.buff.name || row.buff.id
                   }}</span>
                   <span class="text-[0.55rem] font-mono text-gray-300 shrink-0">
-                    {{ row.buff.duration > 0 ? `${row.buff.duration}T` : '—' }}
+                    {{ row.buff.duration < 0 ? '∞' : row.buff.duration > 0 ? `${row.buff.duration}T` : '—' }}
                   </span>
                 </div>
               </div>
