@@ -1,9 +1,11 @@
 <template>
   <div class="flex-1 flex flex-col" style="background: #2e2e2e">
     <div class="px-5 pt-10 pb-4 border-b border-[#404040]">
-      <p class="text-[0.68rem] tracking-[0.3em] text-[#777] font-mono uppercase mb-1">战斗胜利</p>
-      <h2 class="text-xl font-semibold text-[#f0eeeb]">强化技能</h2>
-      <p class="text-sm text-[#888] mt-1">选一项强化加入你的技能池</p>
+      <p class="text-[0.68rem] tracking-[0.3em] text-[#777] font-mono uppercase mb-1">
+        {{ t('skill-pick.header') }}
+      </p>
+      <h2 class="text-xl font-semibold text-[#f0eeeb]">{{ t('skill-pick.title') }}</h2>
+      <p class="text-sm text-[#888] mt-1">{{ t('skill-pick.hint') }}</p>
     </div>
 
     <div class="flex-1 px-5 py-6 flex flex-col gap-3 overflow-y-auto">
@@ -18,8 +20,9 @@
         <template v-if="candidate.kind === 'acquire'">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-              <span class="text-[0.6rem] font-mono px-1.5 py-0.5 rounded bg-[#404040] text-[#888]"
-                >获取</span
+              <span
+                class="text-[0.6rem] font-mono px-1.5 py-0.5 rounded bg-[#404040] text-[#888]"
+                >{{ t('skill-pick.acquire') }}</span
               >
               <span class="text-base font-semibold text-[#e8e4e0]">{{ candidate.skill.name }}</span>
             </div>
@@ -36,7 +39,7 @@
             v-if="multVal(candidate.skill.multiplier) > 0"
             class="text-[0.68rem] text-[#666] font-mono"
           >
-            倍率 ×{{ multVal(candidate.skill.multiplier).toFixed(1) }}
+            {{ t('skill-pick.multiplier') }} ×{{ multVal(candidate.skill.multiplier).toFixed(1) }}
           </p>
         </template>
 
@@ -46,7 +49,7 @@
             <div class="flex items-center gap-2">
               <span
                 class="text-[0.6rem] font-mono px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-400"
-                >升级</span
+                >{{ t('skill-pick.upgrade') }}</span
               >
               <span class="text-base font-semibold text-[#e8e4e0]">{{ candidate.skill.name }}</span>
             </div>
@@ -70,14 +73,14 @@
               (candidate.skill.upgradeLevel ?? 0) + 1
             }}
             <span v-if="candidate.upgrade.type" class="ml-1 opacity-60">{{
-              candidate.upgrade.type === 'breadth' ? '广度' : '深度'
+              candidate.upgrade.type === 'breadth' ? t('skill-pick.breadth') : t('skill-pick.depth')
             }}</span>
           </p>
         </template>
       </button>
 
       <p v-if="game.skillCandidates.length === 0" class="text-sm text-[#666] text-center py-8">
-        暂无可用强化
+        {{ t('skill-pick.empty') }}
       </p>
     </div>
 
@@ -86,7 +89,7 @@
         class="w-full py-3 text-sm text-[#666] hover:text-[#999] transition-colors"
         @click="game.skipSkillPick()"
       >
-        跳过
+        {{ t('skill-pick.skip') }}
       </button>
     </div>
 
@@ -102,9 +105,11 @@ import {
   type SkillTag,
 } from '@xwink/rpg'
 import { useGameStore } from '@/store/game'
+import { useT } from '@/i18n'
 import PlayerStatusBar from '@/ui/components/PlayerStatusBar.vue'
 
 const game = useGameStore()
+const t = useT()
 
 function multVal(m: number | MultiplierDef): number {
   return typeof m === 'number' ? m : m.max

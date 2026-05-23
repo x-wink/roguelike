@@ -21,12 +21,14 @@
           <div class="zone-desc">{{ zone.desc }}</div>
         </div>
         <div class="zone-meta">
-          <span v-if="isCleared(zone.id)" class="zone-tag zone-tag--cleared">已通</span>
+          <span v-if="isCleared(zone.id)" class="zone-tag zone-tag--cleared">{{
+            t('world.cleared')
+          }}</span>
           <span v-else-if="isUnlocked(zone.id)" class="zone-tag zone-tag--open"
             >{{ rowCount(zone.id) }} 行</span
           >
-          <span v-else class="zone-tag zone-tag--locked">锁定</span>
-          <span v-if="isUnlocked(zone.id)" class="zone-enter">进入 →</span>
+          <span v-else class="zone-tag zone-tag--locked">{{ t('world.locked') }}</span>
+          <span v-if="isUnlocked(zone.id)" class="zone-enter">{{ t('world.enter') }}</span>
         </div>
       </button>
     </div>
@@ -35,7 +37,10 @@
 
 <script setup lang="ts">
 import { useGameStore } from '@/store/game'
+import { useT } from '@/i18n'
 import { ZONE_META, ZONE_ORDER, getZoneRowRange, type ZoneId } from '@/game/meta'
+
+const t = useT()
 
 const emit = defineEmits<{ select: [zone: ZoneId] }>()
 const game = useGameStore()

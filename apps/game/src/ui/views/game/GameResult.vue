@@ -16,26 +16,26 @@
         <span class="stat-value">{{ playerHp }} / {{ game.player.health.max }}</span>
       </div>
       <div class="stat-row">
-        <span class="stat-label">理智</span>
+        <span class="stat-label">{{ t('result.san') }}</span>
         <span class="stat-value" :class="{ 'stat-warn': playerSan === 0 }"
           >{{ playerSan }} / {{ game.player.props.san.max }}</span
         >
       </div>
       <div class="stat-row">
-        <span class="stat-label">节点</span>
+        <span class="stat-label">{{ t('result.nodes') }}</span>
         <span class="stat-value">{{ nodesDone }} / {{ game.nodes.length }}</span>
       </div>
       <div class="stat-row">
-        <span class="stat-label">金币</span>
+        <span class="stat-label">{{ t('result.gold') }}</span>
         <span class="stat-value">◈ {{ gold }}</span>
       </div>
     </div>
 
     <div class="action-zone">
       <button v-if="game.activeZone" class="btn-primary" @click="game.enterZone(game.activeZone!)">
-        再来一局
+        {{ t('result.replay') }}
       </button>
-      <button class="btn-secondary" @click="game.endSession()">返回营地</button>
+      <button class="btn-secondary" @click="game.endSession()">{{ t('result.exit') }}</button>
     </div>
   </div>
 </template>
@@ -43,8 +43,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useGameStore } from '@/store/game'
+import { useT } from '@/i18n'
 
 const game = useGameStore()
+const t = useT()
 
 const playerHp = computed(() => game.player.health.value)
 const playerSan = computed(() => game.player.props.san.value)

@@ -2,7 +2,7 @@
   <div class="flex-1 flex flex-col" style="background: #2e2e2e">
     <div class="px-5 pt-10 pb-4 border-b border-[#404040]">
       <p class="text-[0.68rem] tracking-[0.3em] text-[#777] font-mono uppercase mb-1">Rest Point</p>
-      <h2 class="text-xl font-semibold text-[#f0eeeb]">休息点</h2>
+      <h2 class="text-xl font-semibold text-[#f0eeeb]">{{ t('rest.title') }}</h2>
     </div>
 
     <div class="flex-1 px-5 py-5 flex flex-col gap-3 overflow-y-auto">
@@ -13,14 +13,16 @@
       >
         <span class="text-2xl">🌿</span>
         <div>
-          <div class="text-sm font-semibold text-[#e0ddd8]">恢复</div>
-          <div class="text-[0.72rem] text-[#888] mt-0.5">回复 30% 最大 HP</div>
+          <div class="text-sm font-semibold text-[#e0ddd8]">{{ t('rest.heal') }}</div>
+          <div class="text-[0.72rem] text-[#888] mt-0.5">{{ t('rest.heal.desc') }}</div>
         </div>
       </button>
 
       <!-- Upgrade options -->
       <div v-if="upgradableSkills.length > 0">
-        <p class="text-[0.68rem] text-[#666] font-mono tracking-widest mb-2 px-1">— 或强化技能 —</p>
+        <p class="text-[0.68rem] text-[#666] font-mono tracking-widest mb-2 px-1">
+          {{ t('rest.or-upgrade') }}
+        </p>
         <button
           v-for="skill in upgradableSkills"
           :key="skill.id"
@@ -46,8 +48,11 @@
 
 <script setup lang="ts">
 import { useGameStore } from '@/store/game'
+import { useT } from '@/i18n'
 import PlayerStatusBar from '@/ui/components/PlayerStatusBar.vue'
 import { computed } from 'vue'
+
+const t = useT()
 import type { MultiplierDef } from '@xwink/rpg'
 
 const game = useGameStore()

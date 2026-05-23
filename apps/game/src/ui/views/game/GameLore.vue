@@ -1,7 +1,7 @@
 <template>
   <div class="lore-view">
     <header class="lore-header">
-      <span class="lore-title">遗物图鉴</span>
+      <span class="lore-title">{{ t('lore.title') }}</span>
       <span class="lore-count">{{ meta.discoveredCount }} / {{ RELICS.length }}</span>
     </header>
 
@@ -17,7 +17,7 @@
         ]"
       >
         <div class="slot-type-badge" :class="`type-${relic.type}`">
-          {{ TYPE_LABEL[relic.type] }}
+          {{ t(TYPE_LABEL[relic.type]) }}
         </div>
 
         <template v-if="meta.isDiscovered(relic.id)">
@@ -38,13 +38,16 @@
 <script setup lang="ts">
 import { RELICS } from '@/data'
 import { useMetaStore } from '@/store/meta'
+import { useT } from '@/i18n'
 import type { RelicType } from '@/game/meta'
+
+const t = useT()
 
 const meta = useMetaStore()
 
-const TYPE_LABEL: Record<RelicType, string> = {
-  cut: '切割型',
-  sealed: '封存型',
+const TYPE_LABEL: Record<RelicType, Parameters<typeof t>[0]> = {
+  cut: 'relic.type.cut',
+  sealed: 'relic.type.sealed',
 }
 </script>
 

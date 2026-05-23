@@ -24,7 +24,7 @@
               <div class="node-desc">{{ nodeDesc(node.type) }}</div>
             </div>
           </div>
-          <span v-if="isSelectable(node)" class="node-cta">选择 →</span>
+          <span v-if="isSelectable(node)" class="node-cta">{{ t('node.select') }}</span>
           <span v-else-if="node.completed" class="node-done">✓</span>
           <span v-else-if="wasSkipped(node)" class="node-skip">—</span>
         </button>
@@ -36,9 +36,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useGameStore } from '@/store/game'
+import { useT } from '@/i18n'
 import type { NodeType, MapNode } from '@/game/meta'
 
 const game = useGameStore()
+const t = useT()
 
 const uniqueRows = computed(() => {
   const rows = [...new Set(game.nodes.map((n) => n.row))].sort((a, b) => a - b)
@@ -75,25 +77,27 @@ function nodeIcon(type: NodeType) {
 }
 
 function nodeLabel(type: NodeType) {
-  return {
-    battle: '普通战斗',
-    elite: '精英战斗',
-    boss: 'Boss',
-    rest: '休息点',
-    event: '事件',
-    shop: '商店',
-  }[type]
+  const map: Record<NodeType, Parameters<typeof t>[0]> = {
+    battle: 'node.battle',
+    elite: 'node.elite',
+    boss: 'node.boss',
+    rest: 'node.rest',
+    event: 'node.event',
+    shop: 'node.shop',
+  }
+  return t(map[type])
 }
 
 function nodeDesc(type: NodeType) {
-  return {
-    battle: '标准敌人',
-    elite: '强化敌人，掉落更优质',
-    boss: '关卡终点',
-    rest: '回复 HP 或强化技能',
-    event: '随机事件',
-    shop: '购买道具',
-  }[type]
+  const map: Record<NodeType, Parameters<typeof t>[0]> = {
+    battle: 'node.battle.desc',
+    elite: 'node.elite.desc',
+    boss: 'node.boss.desc',
+    rest: 'node.rest.desc',
+    event: 'node.event.desc',
+    shop: 'node.shop.desc',
+  }
+  return t(map[type])
 }
 </script>
 

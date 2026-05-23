@@ -2,8 +2,8 @@
   <div class="relic-pick-shell">
     <div class="relic-header">
       <p class="relic-eyebrow">RELIC</p>
-      <h2 class="relic-title">选取遗物</h2>
-      <p class="relic-hint">选择一件遗物，或跳过</p>
+      <h2 class="relic-title">{{ t('relic-pick.title') }}</h2>
+      <p class="relic-hint">{{ t('relic-pick.hint') }}</p>
     </div>
 
     <div class="relic-list">
@@ -18,9 +18,9 @@
           <span class="card-name">{{ relic.name }}</span>
           <span class="card-badges">
             <span class="card-type" :class="`type-label--${relic.type}`">
-              {{ TYPE_LABEL[relic.type] }}
+              {{ t(TYPE_LABEL[relic.type]) }}
             </span>
-            <span class="card-rarity">{{ RARITY_LABEL[relic.rarity] }}</span>
+            <span class="card-rarity">{{ t(RARITY_LABEL[relic.rarity]) }}</span>
           </span>
         </div>
         <p class="card-desc">{{ relic.description }}</p>
@@ -29,7 +29,7 @@
     </div>
 
     <div class="relic-footer">
-      <button class="btn-skip" @click="game.skipRelicPick()">跳过</button>
+      <button class="btn-skip" @click="game.skipRelicPick()">{{ t('relic-pick.skip') }}</button>
     </div>
 
     <PlayerStatusBar />
@@ -38,20 +38,22 @@
 
 <script setup lang="ts">
 import { useGameStore } from '@/store/game'
+import { useT } from '@/i18n'
 import PlayerStatusBar from '@/ui/components/PlayerStatusBar.vue'
 import type { RelicRarity, RelicType } from '@/game/meta'
 
 const game = useGameStore()
+const t = useT()
 
-const RARITY_LABEL: Record<RelicRarity, string> = {
-  common: '普通',
-  rare: '稀有',
-  epic: '史诗',
+const RARITY_LABEL: Record<RelicRarity, Parameters<typeof t>[0]> = {
+  common: 'rarity.common',
+  rare: 'rarity.rare',
+  epic: 'rarity.epic',
 }
 
-const TYPE_LABEL: Record<RelicType, string> = {
-  cut: '切割型',
-  sealed: '封存型',
+const TYPE_LABEL: Record<RelicType, Parameters<typeof t>[0]> = {
+  cut: 'relic.type.cut',
+  sealed: 'relic.type.sealed',
 }
 </script>
 

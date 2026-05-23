@@ -2,9 +2,9 @@
   <div class="flex-1 flex flex-col" style="background: #2e2e2e">
     <div class="px-5 pt-10 pb-4 border-b border-[#404040]">
       <p class="text-[0.68rem] tracking-[0.3em] text-[#777] font-mono uppercase mb-1">Shop</p>
-      <h2 class="text-xl font-semibold text-[#f0eeeb]">补给站</h2>
+      <h2 class="text-xl font-semibold text-[#f0eeeb]">{{ t('shop.title') }}</h2>
       <div class="flex items-center gap-2 mt-1">
-        <p class="text-sm text-[#888]">选择一项补给</p>
+        <p class="text-sm text-[#888]">{{ t('shop.hint') }}</p>
         <span class="text-[0.72rem] font-mono text-[#c8a840] ml-auto">
           ◈ {{ game.player.backpack.gold }}
         </span>
@@ -52,7 +52,7 @@
         class="w-full py-3 text-sm text-[#666] hover:text-[#999] transition-colors"
         @click="game.skipShop()"
       >
-        跳过
+        {{ t('shop.skip') }}
       </button>
     </div>
 
@@ -62,11 +62,13 @@
 
 <script setup lang="ts">
 import { useGameStore } from '@/store/game'
+import { useT } from '@/i18n'
 import PlayerStatusBar from '@/ui/components/PlayerStatusBar.vue'
 import { describeEventEffect } from '@/game/meta'
 import type { ShopItem } from '@/game/meta'
 
 const game = useGameStore()
+const t = useT()
 
 function canAfford(item: ShopItem): boolean {
   return game.player.backpack.gold >= item.cost

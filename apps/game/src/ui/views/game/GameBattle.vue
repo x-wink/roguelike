@@ -23,7 +23,7 @@
           :class="
             buf.tags.has('debuff') ? 'bg-red-900/25 text-red-400' : 'bg-sky-900/25 text-sky-400'
           "
-          >{{ buf.name }} {{ buf.duration < 0 ? '永' : buf.duration }}</span
+          >{{ buf.name }} {{ buf.duration < 0 ? t('battle.buff.permanent') : buf.duration }}</span
         >
       </div>
     </div>
@@ -60,7 +60,9 @@
                 >-{{ entry.damage }}</span
               >
               <span v-if="entry.isCrit" class="text-red-400 text-[0.58rem]">CRIT</span>
-              <span v-if="entry.isCombo" class="text-sky-400 text-[0.58rem]">连击</span>
+              <span v-if="entry.isCombo" class="text-sky-400 text-[0.58rem]">{{
+                t('battle.combo')
+              }}</span>
             </template>
             <span v-if="entry.counterDamage" class="text-orange-400 text-[0.58rem]"
               >↩-{{ entry.counterDamage }}</span
@@ -81,10 +83,12 @@ import HpBar from '@/ui/components/HpBar.vue'
 import PlayerStatusBar from '@/ui/components/PlayerStatusBar.vue'
 import BattleTimeline from '@/ui/components/BattleTimeline.vue'
 import { useSettingsStore } from '@/store/settings'
+import { useT } from '@/i18n'
 import { computed } from 'vue'
 
 const game = useGameStore()
 const settings = useSettingsStore()
+const t = useT()
 const recentLog = computed(() => game.battleLog)
 const enemyHp = computed(() => game.enemy?.health.value ?? 0)
 const timelineDuration = computed(() => {

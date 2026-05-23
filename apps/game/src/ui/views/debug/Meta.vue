@@ -107,7 +107,6 @@ import DebugLayout from './Layout.vue'
 
 const meta = useMetaStore()
 const game = useGameStore()
-const router = useRouter()
 
 function jumpToZone(zoneId: ZoneId) {
   game.enterZone(zoneId)

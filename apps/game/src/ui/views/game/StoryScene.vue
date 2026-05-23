@@ -17,7 +17,7 @@
     <div class="story-shade" />
 
     <!-- 跳过按钮 -->
-    <button class="story-skip" @click.stop="onSkip">跳过</button>
+    <button class="story-skip" @click.stop="onSkip">{{ t('story.skip') }}</button>
 
     <!-- 对话框 -->
     <div
@@ -50,7 +50,7 @@
             :placeholder="currentBeat.inputPlaceholder ?? ''"
             @keydown.enter.prevent="onSubmitInput"
           />
-          <button class="story-input-btn" @click="onSubmitInput">确认</button>
+          <button class="story-input-btn" @click="onSubmitInput">{{ t('story.confirm') }}</button>
         </div>
       </template>
     </div>
@@ -61,9 +61,11 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGameStore } from '@/store/game'
+import { useT } from '@/i18n'
 import type { BgVariant } from '@/game/story/types'
 const game = useGameStore()
 const router = useRouter()
+const t = useT()
 
 // 刷新时 currentScript 不复原（设计如此），回 home 由 GameHome.onMounted 决定后续流程
 onMounted(() => {
