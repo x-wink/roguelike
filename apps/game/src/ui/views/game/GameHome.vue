@@ -93,7 +93,7 @@
           <div class="map-header">
             <button v-if="game.activeZone" class="map-back" @click="game.exitSession()">←</button>
             <p class="map-label">
-              {{ game.activeZone ? ZONE_NAMES[game.activeZone] + ' · 节点' : 'WORLD MAP · 渊' }}
+              {{ game.activeZone ? ZONE_META[game.activeZone].name + ' · 节点' : 'WORLD MAP · 渊' }}
             </p>
           </div>
           <WorldMap v-if="!game.activeZone" @select="game.enterZone($event)" />
@@ -171,7 +171,7 @@ import { useGameStore } from '@/store/game'
 import { useMetaStore } from '@/store/meta'
 import { useSettingsStore } from '@/store/settings'
 import { useT } from '@/i18n'
-import type { ZoneId } from '@/game/meta'
+import { ZONE_META } from '@/game/meta'
 import { SKILL_POOL } from '@/data'
 import GameMap from './GameMap.vue'
 import WorldMap from './WorldMap.vue'
@@ -250,14 +250,6 @@ const TABS = [
 ] as const
 
 type TabId = (typeof TABS)[number]['id']
-
-const ZONE_NAMES: Record<ZoneId, string> = {
-  wasteland: '荒渊',
-  wandering: '游渊',
-  wall: '壁渊',
-  settlement: '驻渊',
-  apex: '天渊',
-}
 
 // phase='map' 时默认显示地图 tab
 const activeTab = ref<TabId>(game.phase === 'map' ? 'map' : 'camp')

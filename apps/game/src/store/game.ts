@@ -36,6 +36,7 @@ import type {
 } from '@/game/meta'
 import { makeSessionNodes } from '@/game/meta'
 import type { StoryScript } from '@/game/story/types'
+import { APEX_VANGUARD_SCRIPTS } from '@/game/story/apex'
 import {
   ENEMIES,
   EVENT_POOL,
@@ -164,8 +165,10 @@ export const useGameStore = defineStore('game', () => {
 
   // ── 剧情 ──────────────────────────────────────────────────────────────────
   const currentScript = shallowRef<StoryScript | null>(null)
+  let _storyReturnPhase: GamePhase = 'home'
 
-  function playStory(script: StoryScript) {
+  function playStory(script: StoryScript, returnPhase: GamePhase = 'home') {
+    _storyReturnPhase = returnPhase
     currentScript.value = script
     phase.value = 'story'
   }
@@ -175,7 +178,9 @@ export const useGameStore = defineStore('game', () => {
     currentScript.value = null
     if (scriptId === 'prologue-awaken') prologueStage.value = 1
     else if (scriptId === 'prologue-encounter') prologueStage.value = 2
-    phase.value = 'home'
+    const returnPhase = _storyReturnPhase
+    _storyReturnPhase = 'home'
+    phase.value = returnPhase
     _persist()
   }
 
@@ -385,6 +390,15 @@ export const useGameStore = defineStore('game', () => {
 
     phase.value = 'map'
     _persist()
+
+    if (zoneId === 'apex') {
+      const meta = useMetaStore()
+      const stage = meta.pollApexStage()
+      if (stage >= 0) {
+        meta.markApexStageShown(stage)
+        playStory(APEX_VANGUARD_SCRIPTS[stage], 'map')
+      }
+    }
   }
 
   function endSession() {

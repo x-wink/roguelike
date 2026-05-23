@@ -6,12 +6,13 @@ import { computed, ref, watch } from 'vue'
 const META_KEY = 'crucible:meta'
 
 type MetaSnap = {
-  v: 3
+  v: 4
   unlockedSkillIds: string[]
   rareCurrency: number
   completedAchievementIds: string[]
   stats: AchievementStats
   discoveredRelicIds: string[]
+  shownApexStage: number
 }
 
 /** 初始就可用的技能——无需解锁 */
@@ -48,6 +49,7 @@ export const useMetaStore = defineStore('meta', () => {
   const _completedIds = ref<Set<string>>(new Set())
   const stats = ref<AchievementStats>(defaultStats())
   const _discoveredRelicIds = ref<Set<string>>(new Set())
+  const shownApexStage = ref(-1) // -1 = 从未看过任何阶段
 
   // 待显示的成就通知队列（瞬态，不持久化）
   const pendingAchievements = ref<AchievementDef[]>([])
@@ -57,9 +59,8 @@ export const useMetaStore = defineStore('meta', () => {
       const raw = localStorage.getItem(META_KEY)
       if (!raw) return
       const snap = JSON.parse(raw) as Partial<MetaSnap>
-      // v1/v2 → v3 向前兼容
       const v = snap.v as number
-      if (v < 1 || v > 3) return
+      if (v < 1 || v > 4) return
       if (Array.isArray(snap.unlockedSkillIds)) {
         _unlockedIds.value = new Set(snap.unlockedSkillIds)
       }
@@ -75,27 +76,33 @@ export const useMetaStore = defineStore('meta', () => {
       if (Array.isArray(snap.discoveredRelicIds)) {
         _discoveredRelicIds.value = new Set(snap.discoveredRelicIds)
       }
+      if (typeof snap.shownApexStage === 'number') {
+        shownApexStage.value = snap.shownApexStage
+      }
     } catch {}
   }
 
   function _save() {
     try {
       const snap: MetaSnap = {
-        v: 3,
+        v: 4,
         unlockedSkillIds: [..._unlockedIds.value],
         rareCurrency: rareCurrency.value,
         completedAchievementIds: [..._completedIds.value],
         stats: { ...stats.value },
         discoveredRelicIds: [..._discoveredRelicIds.value],
+        shownApexStage: shownApexStage.value,
       }
       localStorage.setItem(META_KEY, JSON.stringify(snap))
     } catch {}
   }
 
   _load()
-  watch([_unlockedIds, rareCurrency, _completedIds, stats, _discoveredRelicIds], _save, {
-    deep: true,
-  })
+  watch(
+    [_unlockedIds, rareCurrency, _completedIds, stats, _discoveredRelicIds, shownApexStage],
+    _save,
+    { deep: true },
+  )
 
   // ── 技能解锁 ─────────────────────────────────────────────────────────────────
 
@@ -167,6 +174,36 @@ export const useMetaStore = defineStore('meta', () => {
     _discoveredRelicIds.value = new Set([..._discoveredRelicIds.value, id])
   }
 
+  // ── 天渊先遣进度 ──────────────────────────────────────────────────────────────
+
+  /**
+   * 根据已通关区域数计算先遣台词阶段。
+   * 0：首次踏入天渊（0–1 区域）
+   * 1：初具积累（2–3 区域）
+   * 2：深层到达（4+ 区域）
+   */
+  function computeApexStage(): number {
+    const n = stats.value.clearedZones.length
+    if (n >= 4) return 2
+    if (n >= 2) return 1
+    return 0
+  }
+
+  /** 若当前元进度对应的阶段高于已看阶段，返回该阶段编号；否则返回 -1（无需播放）。 */
+  function pollApexStage(): number {
+    const stage = computeApexStage()
+    if (stage > shownApexStage.value) return stage
+    return -1
+  }
+
+  function markApexStageShown(stage: number): void {
+    if (stage > shownApexStage.value) shownApexStage.value = stage
+  }
+
+  function resetApexStage(): void {
+    shownApexStage.value = -1
+  }
+
   return {
     rareCurrency,
     unlockedCount,
@@ -182,5 +219,9 @@ export const useMetaStore = defineStore('meta', () => {
     discoveredCount,
     isDiscovered,
     discoverRelic,
+    pollApexStage,
+    markApexStageShown,
+    resetApexStage,
+    shownApexStage,
   }
 })

@@ -5,6 +5,7 @@ import IconSkills from '~icons/lucide/zap'
 import IconBuffs from '~icons/lucide/sparkles'
 import IconEffects from '~icons/lucide/flask-conical'
 import IconFonts from '~icons/lucide/type'
+import IconMeta from '~icons/lucide/database'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -53,6 +54,11 @@ const router = createRouter({
           path: 'fonts',
           component: () => import('@/ui/views/debug/Fonts.vue'),
           meta: { label: '字体', icon: IconFonts },
+        },
+        {
+          path: 'meta',
+          component: () => import('@/ui/views/debug/Meta.vue'),
+          meta: { label: '元进度', icon: IconMeta },
         },
       ],
     },
